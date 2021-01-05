@@ -1,0 +1,142 @@
+{
+	"easycom": {
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [{
+		"path": "pages/index/index",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/my/my",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/rooms/rooms",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/sence/sence",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/systeminfo/systeminfo",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/systeminfo/versioninfo",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/systeminfo/userprotocol",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/login/login",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/setting/setting",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/devicemanage/devicemanage",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/roommanage/roommanage",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/messagemanage/messagemanage",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/messagemanage/messagedetail",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/floormanage/floormanage",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "#C8C9CC",
+		"selectedColor": "#303030",
+		"borderStyle": "white",
+		"backgroundColor": "#ffffff",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"iconPath": "static/tabbar/favorite.png",
+				"selectedIconPath": "static/tabbar/favorite-active.png",
+				"text": "收藏"
+			},
+			{
+				"pagePath": "pages/rooms/rooms",
+				"iconPath": "static/tabbar/rooms.png",
+				"selectedIconPath": "static/tabbar/rooms-active.png",
+				"text": "房间"
+			},
+			{
+				"pagePath": "pages/sence/sence",
+				"iconPath": "./static/tabbar/scene.png",
+				"selectedIconPath": "static/tabbar/scene-active.png",
+				"text": "场景"
+			},
+			{
+				"pagePath": "pages/my/my",
+				"iconPath": "static/tabbar/my.png",
+				"selectedIconPath": "static/tabbar/my-active.png",
+				"text": "我的"
+			}
+		]
+
+	}
+}
