@@ -3,22 +3,27 @@
 		<common-header :floorArray="floorList" :roomArray="roomList" @floorSelect="floorSelect" @roomSelect="roomSelect"></common-header>
 		<view class="main-box">
 			<view class="device-line">
-				<view class="device-card">
+				<view class="device-card" v-for="device in deviceList" :key="device.id">
 					<view class="collect-box">
-						<u-icon :name="singleDevice.favorite?'star-fill':'star'" size="40" :color="singleDevice.favorite?'#F29100':'#c8c9cc'"
-						 @click="singleDevice.favorite= (!singleDevice.favorite)"></u-icon>
+						<u-icon :name="device.favorite?'star-fill':'star'" size="40" :color="device.favorite?'#F29100':'#c8c9cc'" @click="device.favorite= (!device.favorite)"></u-icon>
 					</view>
 					<view class="icon-name-box">
-						<u-image width="100rpx" height="100rpx" :src="singleDevice.open?singleDevice.iconActivePath:singleDevice.iconPath"></u-image>
-						<text>{{singleDevice.name}}</text>
-						<text class="openText">{{singleDevice.open?'打开':'关闭'}}</text>
+						<u-image width="100rpx" height="100rpx" :src="device.open?'../../static/device/'+device.iconActivePath:'../../static/device/'+device.iconPath"></u-image>
+						<text>{{device.name}}</text>
+						<text class="openText" v-if="device.type==1">{{device.open?'打开':'关闭'}}</text>
+						<text class="openText" v-if="device.type==2">{{rateDevice.rate}}%</text>
 					</view>
-					<view class="action-box">
-						<u-switch v-model="singleDevice.open" active-color="#42B983" size="50" :loading="false"></u-switch>
+					<!-- 开关型设备 -->
+					<view class="action-box" v-if="device.type==1">
+						<u-switch v-model="device.open" active-color="#42B983" size="50" :loading="false"></u-switch>
+					</view>
+					<!-- 比例型设备 -->
+					<view class="action-rate-box" v-if="device.type==2">
+						<u-slider v-model="rateDevice.rate" step="10" height="50" activeColor="#42B983" block-width="55"></u-slider>
 					</view>
 				</view>
 
-				<view class="device-card">
+				<!-- <view class="device-card">
 					<view class="collect-box">
 						<u-icon :name="rateDevice.favorite?'star-fill':'star'" size="40" :color="rateDevice.favorite?'#F29100':'#c8c9cc'"
 						 @click="rateDevice.favorite= (!rateDevice.favorite)"></u-icon>
@@ -34,7 +39,7 @@
 					<view class="action-rate-box">
 						<u-slider v-model="rateDevice.rate" step="10" height="50" activeColor="#42B983" block-width="55"></u-slider>
 					</view>
-				</view>
+				</view> -->
 
 			</view>
 		</view>
@@ -49,8 +54,12 @@
 		},
 		data() {
 			return {
+				//楼层集合
 				floorList: [],
+				//房间集合
 				roomList: [],
+				//设备集合
+				deviceList: [],
 				//开关型设置
 				singleDevice: {
 					id: '112233',
@@ -69,13 +78,8 @@
 					rate: 50,
 					iconPath: '../../static/device/window.png',
 					iconActivePath: '../../static/device/window-active.png'
-				},
-				deviceList: [{
-					id: '112233',
-					name: '顶部吊灯',
-					favorite: true,
-					status: true
-				}]
+				}
+
 			}
 		},
 		onShow() {
@@ -101,6 +105,17 @@
 					}
 				})
 			},
+			loadDeviceByRoomSelectd(roomId) {
+				this.$u.api.deviceListByRoomIdApi({
+					roomId: roomId,
+					favorite: true
+				}).then(res => {
+					if (res.status) {
+						this.deviceList = res.data
+					}
+
+				})
+			},
 			/**
 			 * 组件中楼层选择,选择后查询所有房间
 			 * @param {Object} e 楼层ID
@@ -113,8 +128,7 @@
 			 * @param {Object} e 房间ID
 			 */
 			roomSelect(e) {
-				console.warn('房间ID', e)
-
+				this.loadDeviceByRoomSelectd(e)
 			}
 
 		}
@@ -123,23 +137,8 @@
 
 <style lang="scss">
 	.main-box {
-		margin-top: 40rpx;
+		// margin-top: 40rpx;
 
-	}
-
-	.scroll-view_H {
-		white-space: nowrap;
-		width: 100%;
-		height: 100%;
-	}
-
-	.scroll-view-item_H {
-		display: inline-block;
-		width: 100%;
-		height: 1000rpx;
-		line-height: 100%;
-		text-align: center;
-		font-size: 36rpx;
 	}
 
 	.device-line {
@@ -147,12 +146,14 @@
 		justify-content: space-between;
 		margin-left: 20rpx;
 		margin-right: 20rpx;
+		flex-wrap: wrap;
 
 		.device-card {
 			width: 340rpx;
 			background-color: #FFFFFF;
 			border-radius: 20rpx;
 			padding: 20rpx;
+			margin-top: 30rpx;
 
 			.collect-box {}
 

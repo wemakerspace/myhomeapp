@@ -258,17 +258,24 @@ var render = function() {
           _c(
             "v-uni-view",
             { staticClass: _vm._$g(3, "sc"), attrs: { _i: 3 } },
-            [
-              _c(
+            _vm._l(_vm._$g(4, "f"), function(device, $10, $20, $30) {
+              return _c(
                 "v-uni-view",
-                { staticClass: _vm._$g(4, "sc"), attrs: { _i: 4 } },
+                {
+                  key: device,
+                  staticClass: _vm._$g("4-" + $30, "sc"),
+                  attrs: { _i: "4-" + $30 }
+                },
                 [
                   _c(
                     "v-uni-view",
-                    { staticClass: _vm._$g(5, "sc"), attrs: { _i: 5 } },
+                    {
+                      staticClass: _vm._$g("5-" + $30, "sc"),
+                      attrs: { _i: "5-" + $30 }
+                    },
                     [
                       _c("u-icon", {
-                        attrs: { _i: 6 },
+                        attrs: { _i: "6-" + $30 },
                         on: {
                           click: function($event) {
                             return _vm.$handleViewEvent($event)
@@ -280,95 +287,82 @@ var render = function() {
                   ),
                   _c(
                     "v-uni-view",
-                    { staticClass: _vm._$g(7, "sc"), attrs: { _i: 7 } },
+                    {
+                      staticClass: _vm._$g("7-" + $30, "sc"),
+                      attrs: { _i: "7-" + $30 }
+                    },
                     [
-                      _c("u-image", { attrs: { _i: 8 } }),
-                      _c("v-uni-text", { attrs: { _i: 9 } }, [
-                        _vm._v(_vm._$g(9, "t0-0"))
+                      _c("u-image", { attrs: { _i: "8-" + $30 } }),
+                      _c("v-uni-text", { attrs: { _i: "9-" + $30 } }, [
+                        _vm._v(_vm._$g("9-" + $30, "t0-0"))
                       ]),
-                      _c(
-                        "v-uni-text",
-                        { staticClass: _vm._$g(10, "sc"), attrs: { _i: 10 } },
-                        [_vm._v(_vm._$g(10, "t0-0"))]
+                      _vm._$g("10-" + $30, "i")
+                        ? _c(
+                            "v-uni-text",
+                            {
+                              staticClass: _vm._$g("10-" + $30, "sc"),
+                              attrs: { _i: "10-" + $30 }
+                            },
+                            [_vm._v(_vm._$g("10-" + $30, "t0-0"))]
+                          )
+                        : _vm._e(),
+                      _vm._$g("11-" + $30, "i")
+                        ? _c(
+                            "v-uni-text",
+                            {
+                              staticClass: _vm._$g("11-" + $30, "sc"),
+                              attrs: { _i: "11-" + $30 }
+                            },
+                            [_vm._v(_vm._$g("11-" + $30, "t0-0") + "%")]
+                          )
+                        : _vm._e()
+                    ],
+                    1
+                  ),
+                  _vm._$g("12-" + $30, "i")
+                    ? _c(
+                        "v-uni-view",
+                        {
+                          staticClass: _vm._$g("12-" + $30, "sc"),
+                          attrs: { _i: "12-" + $30 }
+                        },
+                        [
+                          _c("u-switch", {
+                            attrs: { _i: "13-" + $30 },
+                            model: {
+                              value: _vm._$g("13-" + $30, "v-model"),
+                              callback: function() {},
+                              expression: "device.open"
+                            }
+                          })
+                        ],
+                        1
                       )
-                    ],
-                    1
-                  ),
-                  _c(
-                    "v-uni-view",
-                    { staticClass: _vm._$g(11, "sc"), attrs: { _i: 11 } },
-                    [
-                      _c("u-switch", {
-                        attrs: { _i: 12 },
-                        model: {
-                          value: _vm._$g(12, "v-model"),
-                          callback: function() {},
-                          expression: "singleDevice.open"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _c(
-                "v-uni-view",
-                { staticClass: _vm._$g(13, "sc"), attrs: { _i: 13 } },
-                [
-                  _c(
-                    "v-uni-view",
-                    { staticClass: _vm._$g(14, "sc"), attrs: { _i: 14 } },
-                    [
-                      _c("u-icon", {
-                        attrs: { _i: 15 },
-                        on: {
-                          click: function($event) {
-                            return _vm.$handleViewEvent($event)
-                          }
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _c(
-                    "v-uni-view",
-                    { staticClass: _vm._$g(16, "sc"), attrs: { _i: 16 } },
-                    [
-                      _c("u-image", { attrs: { _i: 17 } }),
-                      _c("v-uni-text", { attrs: { _i: 18 } }, [
-                        _vm._v(_vm._$g(18, "t0-0"))
-                      ]),
-                      _c(
-                        "v-uni-text",
-                        { staticClass: _vm._$g(19, "sc"), attrs: { _i: 19 } },
-                        [_vm._v(_vm._$g(19, "t0-0") + "%")]
-                      )
-                    ],
-                    1
-                  ),
-                  false
-                    ? undefined
                     : _vm._e(),
-                  _c(
-                    "v-uni-view",
-                    { staticClass: _vm._$g(22, "sc"), attrs: { _i: 22 } },
-                    [
-                      _c("u-slider", {
-                        attrs: { _i: 23 },
-                        model: {
-                          value: _vm._$g(23, "v-model"),
-                          callback: function() {},
-                          expression: "rateDevice.rate"
-                        }
-                      })
-                    ],
-                    1
-                  )
+                  _vm._$g("14-" + $30, "i")
+                    ? _c(
+                        "v-uni-view",
+                        {
+                          staticClass: _vm._$g("14-" + $30, "sc"),
+                          attrs: { _i: "14-" + $30 }
+                        },
+                        [
+                          _c("u-slider", {
+                            attrs: { _i: "15-" + $30 },
+                            model: {
+                              value: _vm._$g("15-" + $30, "v-model"),
+                              callback: function() {},
+                              expression: "rateDevice.rate"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _vm._e()
                 ],
                 1
               )
-            ],
+            }),
             1
           )
         ],
@@ -3630,7 +3624,7 @@ if(false) {}
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ./node_modules/css-loader/dist/runtime/api.js */ 13);
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 行为相关颜色 */\n/* 文字基本颜色 */\n/* 背景颜色 */\n/* 边框颜色 */\n/* 尺寸变量 */\n/* 文字尺寸 */\n/* 图片尺寸 */\n/* Border Radius */\n/* 水平间距 */\n/* 垂直间距 */\n/* 透明度 */\n/* 文章场景相关 */\n.main-box {\n  margin-top: 40rpx;\n}\n.scroll-view_H {\n  white-space: nowrap;\n  width: 100%;\n  height: 100%;\n}\n.scroll-view-item_H {\n  display: inline-block;\n  width: 100%;\n  height: 1000rpx;\n  line-height: 100%;\n  text-align: center;\n  font-size: 36rpx;\n}\n.device-line {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n          justify-content: space-between;\n  margin-left: 20rpx;\n  margin-right: 20rpx;\n}\n.device-line .device-card {\n  width: 340rpx;\n  background-color: #FFFFFF;\n  border-radius: 20rpx;\n  padding: 20rpx;\n}\n.device-line .device-card .icon-name-box {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -webkit-flex-direction: column;\n          flex-direction: column;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n          align-items: center;\n  padding: 20rpx;\n}\n.device-line .device-card .icon-name-box uni-text {\n  margin-top: 20rpx;\n  font-size: 25rpx;\n  font-weight: bold;\n}\n.device-line .device-card .icon-name-box .openText {\n  font-size: 24rpx;\n  color: #C8C9CC;\n}\n.device-line .device-card .action-box {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n          justify-content: center;\n  margin-top: 30rpx;\n  padding: 20rpx;\n}\n.device-line .device-card .action-rate-box {\n  margin-top: 30rpx;\n  padding: 20rpx;\n}\n", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 行为相关颜色 */\n/* 文字基本颜色 */\n/* 背景颜色 */\n/* 边框颜色 */\n/* 尺寸变量 */\n/* 文字尺寸 */\n/* 图片尺寸 */\n/* Border Radius */\n/* 水平间距 */\n/* 垂直间距 */\n/* 透明度 */\n/* 文章场景相关 */\n.device-line {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n          justify-content: space-between;\n  margin-left: 20rpx;\n  margin-right: 20rpx;\n  -webkit-flex-wrap: wrap;\n          flex-wrap: wrap;\n}\n.device-line .device-card {\n  width: 340rpx;\n  background-color: #FFFFFF;\n  border-radius: 20rpx;\n  padding: 20rpx;\n  margin-top: 30rpx;\n}\n.device-line .device-card .icon-name-box {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -webkit-flex-direction: column;\n          flex-direction: column;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n          align-items: center;\n  padding: 20rpx;\n}\n.device-line .device-card .icon-name-box uni-text {\n  margin-top: 20rpx;\n  font-size: 25rpx;\n  font-weight: bold;\n}\n.device-line .device-card .icon-name-box .openText {\n  font-size: 24rpx;\n  color: #C8C9CC;\n}\n.device-line .device-card .action-box {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n          justify-content: center;\n  margin-top: 30rpx;\n  padding: 20rpx;\n}\n.device-line .device-card .action-rate-box {\n  margin-top: 30rpx;\n  padding: 20rpx;\n}\n", ""]);
 // Exports
 module.exports = exports;
 
