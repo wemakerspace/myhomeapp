@@ -22,6 +22,12 @@
 						<u-slider v-model="rateDevice.rate" step="10" height="50" activeColor="#42B983" block-width="55"></u-slider>
 					</view>
 				</view>
+				<view class="no-device-wrapper" v-if="deviceList.length==0">
+					<u-empty src="../../static/device-64.png" text="无设备">
+						<u-button type="success" slot="bottom" style="margin-top: 50rpx;" @click="gotoDeviceManage">添加设备</u-button>
+					</u-empty>
+				</view>
+
 
 				<!-- <view class="device-card">
 					<view class="collect-box">
@@ -129,6 +135,11 @@
 			 */
 			roomSelect(e) {
 				this.loadDeviceByRoomSelectd(e)
+			},
+			gotoDeviceManage() {
+				uni.navigateTo({
+					url: '../devicemanage/devicemanage'
+				})
 			}
 
 		}
@@ -147,6 +158,16 @@
 		margin-left: 20rpx;
 		margin-right: 20rpx;
 		flex-wrap: wrap;
+
+		.no-device-wrapper {
+			display: flex;
+			justify-content: center;
+			width: 100%;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
 
 		.device-card {
 			width: 340rpx;

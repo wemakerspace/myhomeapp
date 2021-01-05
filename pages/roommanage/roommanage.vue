@@ -19,7 +19,7 @@
 			<!-- body -->
 			<view class="item-box-wrapper">
 				<!-- 无数据提示 -->
-				<u-empty text="暂无楼层数据" mode="data" v-if="roomArray.length==0"></u-empty>
+				<u-empty text="暂无房间数据" mode="data" v-if="roomArray.length==0"></u-empty>
 				<u-cell-group v-else>
 					<u-cell-item :title="room.name" v-for="(room,index) in roomArray" :key='index' :arrow="false">
 						<u-icon name="setting" slot="right-icon" @click="showModifyMask(room)"></u-icon>

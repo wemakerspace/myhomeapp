@@ -24,16 +24,16 @@
 		<!-- 体 -->
 		<u-cell-group>
 			<u-cell-item title="楼层管理" @click="gotoFloorManage">
-				<u-icon name="../../static/icons/floor.png" slot="icon" size="34"></u-icon>
+				<u-icon name="../../static/icons/floor.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
 			</u-cell-item>
 			<u-cell-item title="房间管理" @click="gotoRoomManage">
-				<u-icon name="../../static/icons/rooms.png" slot="icon" size="34"></u-icon>
+				<u-icon name="../../static/icons/rooms.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
 			</u-cell-item>
 			<u-cell-item title="家庭管理" @click="gotoRoomManage">
-				<u-icon name="../../static/icons/familly.png" slot="icon" size="34"></u-icon>
+				<u-icon name="../../static/icons/familly.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
 			</u-cell-item>
 			<u-cell-item title="设备管理" @click="gotoDeviceManage">
-				<u-icon name="../../static/icons/device.png" slot="icon" size="34"></u-icon>
+				<u-icon name="../../static/icons/device.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
 			</u-cell-item>
 		</u-cell-group>
 
