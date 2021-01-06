@@ -8,7 +8,7 @@
 				</view>
 				<view class="action-box">
 					<view class="" style="display: flex;align-items: center;margin-right: 30rpx;">
-						<text style="font-size: 20rpx;margin-right: 10rpx;">{{selectedFloor.label?selectedFloor.label:'请选择楼层'}}</text>
+						<text style="font-size: 20rpx;margin-right: 10rpx;">{{selectedFloor.label?selectedFloor.label:'选择楼层'}}</text>
 						<u-icon name="arrow-down-fill" @click="floorSelectShow=true" size="25"></u-icon>
 					</view>
 					<view class="">

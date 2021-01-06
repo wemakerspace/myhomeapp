@@ -8,7 +8,7 @@
 				<text>大熊智能家居</text>
 			</view>
 			<view class="select-box">
-				<text style="font-size: 20rpx;margin-right: 10rpx;">{{selectedFloor.label?selectedFloor.label:'请选择楼层'}}</text>
+				<text style="font-size: 20rpx;margin-right: 10rpx;">{{selectedFloor.label?selectedFloor.label:'选择楼层'}}</text>
 				<u-icon name="arrow-down-fill" size="30" color="#c8c9cc" @click="selectFloorShow=true"></u-icon>
 				<u-select v-model="selectFloorShow" :list="floorArray" value-name="id" label-name="name" @confirm="selectConfirm"></u-select>
 			</view>
