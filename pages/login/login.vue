@@ -15,6 +15,7 @@
 					<u-button type="success" class="btn" @click="doLogin">登录</u-button>
 				</view>
 			</view>
+
 			<view class="another-login-box">
 				<view class="weixin-login-box">
 					<image src="../../static/login/weixin.png" mode="aspectFill" style="height: 80rpx;width: 80rpx;"></image>
@@ -35,7 +36,8 @@
 		},
 		data() {
 			return {
-
+				mobile: '',
+				password: ''
 			}
 		},
 		methods: {
@@ -60,6 +62,9 @@
 		transform: translate(-50%, -50%);
 		width: 650rpx;
 		background-color: #FFFFFF;
+		padding: 40rpx;
+		border-radius: 30rpx;
+
 
 		.logo-box {
 			padding: 30rpx;
@@ -82,7 +87,7 @@
 		}
 
 		.another-login-box {
-			margin-top: 40px;
+			margin-top: 60px;
 			padding: 20rpx;
 			display: flex;
 			justify-content: center;
@@ -96,6 +101,7 @@
 					margin-top: 10rpx;
 					font-size: 20rpx;
 					color: #303030;
+
 				}
 			}
 

@@ -3,7 +3,7 @@
 		onLaunch: function() {
 			console.log('1====> App Launch,check update')
 			//应用启动时，判断是否登录，未登录的话就显示登录页面
-			let loginStatus = true
+			let loginStatus = false
 			if (!loginStatus) {
 				uni.reLaunch({
 					url: 'pages/login/login'
