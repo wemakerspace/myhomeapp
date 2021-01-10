@@ -9,6 +9,10 @@ let deviceListByRoomIdUrl = '/device/listByRoomId'
 
 //家庭相关
 let familyAddOrUpdateUrl = '/family/addOrUpdate'
+let familyListUrl = '/family/familyList'
+
+//用户相关
+let searchUserByPhoneUrl = '/user/searchUserByPhone'
 
 
 const install = (Vue, vm) => {
@@ -22,6 +26,9 @@ const install = (Vue, vm) => {
 	let deviceListByRoomIdApi = (params = {}) => vm.$u.get(deviceListByRoomIdUrl, params)
 
 	let familyAddOrUpdateApi = (params = {}) => vm.$u.post(familyAddOrUpdateUrl, params)
+	let familyListApi = (params = {}) => vm.$u.get(familyListUrl, params)
+
+	let searchUserByPhoneApi = (params = {}) => vm.$u.get(searchUserByPhoneUrl, params)
 
 
 
@@ -31,8 +38,9 @@ const install = (Vue, vm) => {
 		roomAddOrUpdateApi,
 		roomListByFloorIdApi,
 		deviceListByRoomIdApi,
-		familyAddOrUpdateApi
-
+		familyAddOrUpdateApi,
+		familyListApi,
+		searchUserByPhoneApi
 	}
 }
 

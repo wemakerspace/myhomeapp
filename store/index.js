@@ -4,9 +4,18 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
+		familyId: ''
 
 	},
 	mutations: {
+		/**
+		 * 设置家庭ID
+		 * @param {Object} state
+		 * @param {Object} fId
+		 */
+		setFamilyId(state, fId) {
+			state.familyId = fId
+		}
 
 	}
 })
