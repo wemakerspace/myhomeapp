@@ -10,7 +10,8 @@
 			<view class="select-box">
 				<text style="font-size: 20rpx;margin-right: 10rpx;">{{selectedFloor.label?selectedFloor.label:'选择楼层'}}</text>
 				<u-icon name="arrow-down-fill" size="30" color="#c8c9cc" @click="selectFloorShow=true"></u-icon>
-				<u-select v-model="selectFloorShow" :list="floorArray" value-name="id" label-name="name" @confirm="selectConfirm"></u-select>
+				<u-select v-model="selectFloorShow" :list="floorArray" value-name="id" label-name="name" @confirm="selectConfirm"
+				 :default-value="selectedFloorIndex"></u-select>
 			</view>
 		</view>
 		<view class="list-wrapper">
@@ -46,6 +47,12 @@
 					this.$emit('roomSelect', this.realRoomArray[0].id)
 				}
 
+			},
+			floorArray(nv, ov) {
+				let firstObj = nv[0]
+				this.$emit('floorSelect', firstObj.id)
+				this.selectedFloor.label = firstObj.name
+
 			}
 		},
 		data() {
@@ -53,7 +60,8 @@
 				realRoomArray: [],
 				selectedFloor: {},
 				selectFloorShow: false,
-				roomIndex: 0
+				roomIndex: 0,
+				selectedFloorIndex: [0]
 			}
 		},
 		methods: {
@@ -62,6 +70,11 @@
 			 */
 			selectConfirm(e) {
 				this.selectedFloor = e[0]
+				for (var i = 0; i < this.floorArray.length; i++) {
+					if (this.floorArray[i].id == e[0].value) {
+						this.selectedFloorIndex = [i]
+					}
+				}
 				this.$emit('floorSelect', e[0].value)
 			},
 			roomChange(e) {

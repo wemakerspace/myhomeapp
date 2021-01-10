@@ -8,7 +8,7 @@
 				</view>
 				<view class="action-box">
 					<view class="">
-						<u-icon name="plus" @click="addMaskShow=true" size="40" color="#c8c9cc"></u-icon>
+						<u-icon name="plus" @click="addMaskShow=true" size="40" color="#303030"></u-icon>
 					</view>
 				</view>
 			</view>

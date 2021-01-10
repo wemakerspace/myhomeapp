@@ -90,6 +90,9 @@
 		},
 		onShow() {
 			this.loadFloorList()
+
+			console.log(plus.device.getVolume())
+
 		},
 		methods: {
 			/**
@@ -108,6 +111,9 @@
 				}).then(res => {
 					if (res.status) {
 						this.roomList = res.data
+						if (res.data.length == 0) {
+							this.deviceList = []
+						}
 					}
 				})
 			},
@@ -116,6 +122,7 @@
 					roomId: roomId,
 					favorite: true
 				}).then(res => {
+					console.log(res.data.length, '==')
 					if (res.status) {
 						this.deviceList = res.data
 					}

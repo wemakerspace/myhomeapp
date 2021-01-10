@@ -7,18 +7,21 @@ let roomListByFloorIdUrl = '/room/listByFloorId'
 //device相关
 let deviceListByRoomIdUrl = '/device/listByRoomId'
 
-
+//家庭相关
+let familyAddOrUpdateUrl = '/family/addOrUpdate'
 
 
 const install = (Vue, vm) => {
 
-	let floorAddOrUpdateApi = (params = {}) => vm.$u.post(floorAddOrUpdateUrl, params);
-	let floorListApi = (params = {}) => vm.$u.get(floorListUrl, params);
+	let floorAddOrUpdateApi = (params = {}) => vm.$u.post(floorAddOrUpdateUrl, params)
+	let floorListApi = (params = {}) => vm.$u.get(floorListUrl, params)
 
-	let roomAddOrUpdateApi = (params = {}) => vm.$u.post(roomAddOrUpdateUrl, params);
-	let roomListByFloorIdApi = (params = {}) => vm.$u.get(roomListByFloorIdUrl, params);
+	let roomAddOrUpdateApi = (params = {}) => vm.$u.post(roomAddOrUpdateUrl, params)
+	let roomListByFloorIdApi = (params = {}) => vm.$u.get(roomListByFloorIdUrl, params)
 
-	let deviceListByRoomIdApi = (params = {}) => vm.$u.get(deviceListByRoomIdUrl, params);
+	let deviceListByRoomIdApi = (params = {}) => vm.$u.get(deviceListByRoomIdUrl, params)
+
+	let familyAddOrUpdateApi = (params = {}) => vm.$u.post(familyAddOrUpdateUrl, params)
 
 
 
@@ -27,9 +30,10 @@ const install = (Vue, vm) => {
 		floorListApi,
 		roomAddOrUpdateApi,
 		roomListByFloorIdApi,
-		deviceListByRoomIdApi
+		deviceListByRoomIdApi,
+		familyAddOrUpdateApi
 
-	};
+	}
 }
 
 export default {

@@ -1,8 +1,8 @@
 
 const install = (Vue, vm) => {
 	Vue.prototype.$u.http.setConfig({
-		baseUrl: 'http://gameapp.5gzvip.idcfengye.com',
-		// baseUrl: 'http://127.0.0.1:9111',
+		baseUrl: 'http://ayilink2019.eicp.vip/',
+		// baseUrl: 'http://192.168.31.33:8111',
 	});
 	// 请求拦截，配置Token等参数
 	Vue.prototype.$u.http.interceptor.request = (config) => {

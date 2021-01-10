@@ -8,8 +8,13 @@ Vue.use(uView)
 
 App.mpType = 'app'
 
+//引入vuex
+import store from './store/index.js'
+
 const app = new Vue({
-	...App
+	...App,
+	//挂载
+	store
 })
 
 // http拦截器，此为需要加入的内容，如果不是写在common目录，请自行修改引入路径

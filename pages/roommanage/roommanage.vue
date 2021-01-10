@@ -12,7 +12,7 @@
 						<u-icon name="arrow-down-fill" @click="floorSelectShow=true" size="25"></u-icon>
 					</view>
 					<view class="">
-						<u-icon name="plus" @click="showAddMask" size="40" color="#c8c9cc"></u-icon>
+						<u-icon name="plus" @click="showAddMask" size="40" :color="selectedFloor.label?'#303030':'#c8c9cc'"></u-icon>
 					</view>
 				</view>
 			</view>

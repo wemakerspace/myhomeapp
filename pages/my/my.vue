@@ -29,7 +29,7 @@
 			<u-cell-item title="房间管理" @click="gotoRoomManage">
 				<u-icon name="../../static/icons/rooms.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
 			</u-cell-item>
-			<u-cell-item title="家庭管理" @click="gotoRoomManage">
+			<u-cell-item title="家庭管理" @click="gotoFamilyManage">
 				<u-icon name="../../static/icons/familly.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
 			</u-cell-item>
 			<u-cell-item title="设备管理" @click="gotoDeviceManage">
@@ -65,6 +65,11 @@
 			gotoRoomManage() {
 				uni.navigateTo({
 					url: '../roommanage/roommanage'
+				})
+			},
+			gotoFamilyManage() {
+				uni.navigateTo({
+					url: '../familymanage/familymanage'
 				})
 			},
 			/**

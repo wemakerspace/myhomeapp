@@ -9,12 +9,32 @@
 					url: 'pages/login/login'
 				})
 			}
+			// uni.openBluetoothAdapter({
+			// 	success() {
+			// 		console.log('1.开启蓝牙适配器成功')
+			// 		uni.startBeaconDiscovery({
+			// 			ignoreBluetoothAvailable: true,
+			// 			success(be) {
+			// 				console.log('2.开启beancon发现', be)
+			// 				uni.onBeaconUpdate(function(rr) {
+			// 					console.log('3---', rr.beacons[0])
+								
+			// 				})
+			// 			}
+			// 		})
+			// 	}
+			// })
+
 		},
 		onShow: function() {
 			console.log('2=====>App Show')
+
 		},
 		onHide: function() {
 			console.log('3=====>App Hide')
+		},
+		methods: {
+
 		}
 	}
 </script>
