@@ -107,6 +107,30 @@
 				"titleNView": false
 			}
 		}
+	}, {
+		"path": "pages/assistentdevice/assistentdevice",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+
+	}, {
+		"path": "pages/assistentdevice/beaconmanage/beaconmanage",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+
+	}, {
+		"path": "pages/assistentdevice/watchmanage/watchmanage",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+
 	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

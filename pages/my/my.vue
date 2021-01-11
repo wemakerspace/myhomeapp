@@ -35,6 +35,9 @@
 			<u-cell-item title="设备管理" @click="gotoDeviceManage">
 				<u-icon name="../../static/icons/device.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
 			</u-cell-item>
+			<u-cell-item title="辅助设备" @click="gotoAssistentDevice">
+				<u-icon name="../../static/icons/assistent.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
+			</u-cell-item>
 		</u-cell-group>
 
 	</view>
@@ -78,6 +81,14 @@
 			gotoDeviceManage() {
 				uni.navigateTo({
 					url: '../devicemanage/devicemanage'
+				})
+			},
+			/**
+			 * 显示辅助设备管理
+			 */
+			gotoAssistentDevice() {
+				uni.navigateTo({
+					url: '../assistentdevice/assistentdevice'
 				})
 			},
 

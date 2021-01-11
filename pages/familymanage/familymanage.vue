@@ -4,7 +4,7 @@
 		<view class="add-body">
 			<view class="header-box">
 				<view class="">
-					<text>选择房间后操作</text>
+					<text>新增家庭或者添加成员</text>
 				</view>
 				<view class="action-box">
 					<view style="display: flex;align-items: center;margin-right: 30rpx;">
@@ -96,6 +96,13 @@
 		},
 		onShow() {
 			this.loadFamilyList()
+		},
+		watch: {
+			userPhone(nv, ov) {
+				if (this.$u.test.mobile(nv)) {
+					console.log('------')
+				}
+			}
 		},
 		methods: {
 			/**
