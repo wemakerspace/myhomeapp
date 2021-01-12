@@ -6,19 +6,27 @@
 			<u-cell-item icon="server-man" title="帮助与反馈"></u-cell-item>
 			<!-- 有新版本时提示升级 -->
 			<u-cell-item icon="info-circle-fill" title="应用信息" @click="gotoSystemInfo"></u-cell-item>
+			<u-cell-item title="退出" @click="confirmLogoutShow=true">
+				<u-icon name="../../static/icons/logout.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
+			</u-cell-item>
 		</u-cell-group>
+		<u-modal v-model="confirmLogoutShow" content="是否确认退出" :show-cancel-button="true" @cancel="confirmLogoutShow=false"
+		 @confirm="doLogOut"></u-modal>
 	</view>
 </template>
 
 <script>
 	import NormalHeader from '../../components/NormalHeader.vue'
+	import {
+		clear
+	} from '../../utils/usertoken.js'
 	export default {
 		components: {
 			NormalHeader
 		},
 		data() {
 			return {
-
+				confirmLogoutShow: false
 			}
 		},
 		methods: {
@@ -30,6 +38,16 @@
 					url: '../systeminfo/systeminfo'
 				})
 			},
+			/**
+			 * 退出系统
+			 */
+			doLogOut() {
+				clear()
+				//跳转到登录页
+				uni.reLaunch({
+					url: '../login/login'
+				})
+			}
 		}
 	}
 </script>

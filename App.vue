@@ -1,10 +1,12 @@
 <script>
+	import {
+		getToken
+	} from 'utils/usertoken.js'
 	export default {
 		onLaunch: function() {
 			console.log('1====> App Launch,check update')
 			//应用启动时，判断是否登录，未登录的话就显示登录页面
-			let loginStatus = false
-			if (!loginStatus) {
+			if (!getToken()) {
 				uni.reLaunch({
 					url: 'pages/login/login'
 				})
@@ -18,7 +20,7 @@
 			// 				console.log('2.开启beancon发现', be)
 			// 				uni.onBeaconUpdate(function(rr) {
 			// 					console.log('3---', rr.beacons[0])
-								
+
 			// 				})
 			// 			}
 			// 		})

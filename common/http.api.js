@@ -13,6 +13,7 @@ let familyListUrl = '/family/familyList'
 
 //用户相关
 let searchUserByPhoneUrl = '/user/searchUserByPhone'
+let loginByPhonePasswordUrl = '/user/loginByPhonePassword'
 
 
 const install = (Vue, vm) => {
@@ -29,6 +30,7 @@ const install = (Vue, vm) => {
 	let familyListApi = (params = {}) => vm.$u.get(familyListUrl, params)
 
 	let searchUserByPhoneApi = (params = {}) => vm.$u.get(searchUserByPhoneUrl, params)
+	let loginByPhonePasswordApi = (params = {}) => vm.$u.post(loginByPhonePasswordUrl, params)
 
 
 
@@ -40,7 +42,8 @@ const install = (Vue, vm) => {
 		deviceListByRoomIdApi,
 		familyAddOrUpdateApi,
 		familyListApi,
-		searchUserByPhoneApi
+		searchUserByPhoneApi,
+		loginByPhonePasswordApi
 	}
 }
 
