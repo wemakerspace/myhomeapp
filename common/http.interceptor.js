@@ -1,12 +1,13 @@
-
+import {
+	getToken
+} from 'utils/usertoken.js'
 const install = (Vue, vm) => {
 	Vue.prototype.$u.http.setConfig({
 		baseUrl: 'http://ayilink2019.eicp.vip/',
-		// baseUrl: 'http://192.168.31.33:8111',
 	});
 	// 请求拦截，配置Token等参数
 	Vue.prototype.$u.http.interceptor.request = (config) => {
-		const token = '';
+		const token = getToken();
 		config.header.token = token;
 		return config;
 	}

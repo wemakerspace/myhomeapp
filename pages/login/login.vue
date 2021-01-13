@@ -64,8 +64,10 @@
 				if (this.$u.test.mobile(this.loginObj.phone) && this.$u.trim(this.loginObj.password) != '') {
 					this.$u.api.loginByPhonePasswordApi(this.loginObj).then(res => {
 						if (res.status) {
-							console.log(res.data)
 							saveToken(res.data)
+							uni.reLaunch({
+								url: '../index/index'
+							})
 						} else {
 							this.$refs.uToast.show({
 								title: res.message,

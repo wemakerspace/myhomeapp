@@ -8,7 +8,7 @@
 				</view>
 				<view class="action-box">
 					<view style="display: flex;align-items: center;margin-right: 30rpx;">
-						<u-icon name="../../static/addfamily-64.png" @click="addUserMaskShow=true" size="40" color="#303030"></u-icon>
+						<u-icon name="../../static/addfamily-64.png" @click="addUserMaskShow=true" size="40"></u-icon>
 					</view>
 					<view class="">
 						<u-icon name="plus" @click="addMaskShow=true" size="40" color="#303030"></u-icon>
@@ -18,7 +18,7 @@
 			<view class="item-box-wrapper">
 				<!-- 无数据提示 -->
 				<view class="family-cad-item" v-for="(family,index) in familyList" :key="index">
-					<view class="card-header-box">
+					<view class="card-header-box" @click="showModifyMask(family)">
 						<view>
 							<text style="font-size: 30rpx;">{{family.name}}</text>
 						</view>
@@ -33,6 +33,8 @@
 					</view>
 				</view>
 			</view>
+			<!-- 无数据提示 -->
+			<u-empty text="暂无家庭数据" mode="data" v-if="familyList.length==0"></u-empty>
 		</view>
 		<!-- 添加用户mask -->
 		<u-mask :show="addUserMaskShow">
@@ -47,7 +49,7 @@
 				</view>
 			</view>
 		</u-mask>
-		<!-- 添加楼层mask -->
+		<!-- 添加mask -->
 		<u-mask :show="addMaskShow">
 			<view class="add-box">
 				<view style="padding: 20rpx;display: flex;justify-content: flex-end;">
@@ -59,15 +61,15 @@
 				</view>
 			</view>
 		</u-mask>
-		<!-- 修改楼层mask -->
+		<!-- 修改mask -->
 		<u-mask :show="modifyMaskShow">
 			<view class="add-box">
 				<view style="padding: 20rpx;display: flex;justify-content: flex-end;">
 					<u-icon name="close" @click="modifyMaskShow=false"></u-icon>
 				</view>
-				<u-field v-model="modifyData.name" label="楼层名" placeholder="例如: 一楼"></u-field>
+				<u-field v-model="modifyData.name" label="家庭名" placeholder="例如: 大熊家"></u-field>
 				<view style="padding-top: 40rpx;padding-bottom: 40rpx;">
-					<u-button type="success">保存</u-button>
+					<u-button type="success" @click="updateData">保存</u-button>
 				</view>
 			</view>
 		</u-mask>
@@ -75,6 +77,10 @@
 </template>
 
 <script>
+	import {
+		saveSelectFamily,
+		getSelectFamily
+	} from '../../utils/cache.js'
 	import NormalHeader from '../../components/NormalHeader.vue'
 	export default {
 		components: {
@@ -96,12 +102,11 @@
 		},
 		onShow() {
 			this.loadFamilyList()
+			console.log(getSelectFamily())
 		},
 		watch: {
 			userPhone(nv, ov) {
-				if (this.$u.test.mobile(nv)) {
-					console.log('------')
-				}
+				if (this.$u.test.mobile(nv)) {}
 			}
 		},
 		methods: {
@@ -112,12 +117,22 @@
 				this.$u.api.familyListApi().then(res => {
 					if (res.status) {
 						this.familyList = res.data
+						//如果本地未存储同时数组不为空，则选中第一项
+						if (res.data.length > 0 && !getSelectFamily()) {
+							saveSelectFamily(res.data[0])
+						} else {
+							for (var i = 0; i < this.familyList.length; i++) {
+								if (this.familyList[i].id == getSelectFamily().id) {
+									this.selectedIndex = i
+								}
+							}
+						}
 					}
 				})
 			},
 			cardSelected(index) {
 				this.selectedIndex = index
-
+				saveSelectFamily(this.familyList[index])
 			},
 			closeMarsk() {
 				this.familyName = ''
@@ -126,6 +141,11 @@
 			closeAddUserMarsk() {
 				this.userPhone = ''
 				this.addUserMaskShow = false
+			},
+
+			showModifyMask(modifyData) {
+				this.modifyData = modifyData
+				this.modifyMaskShow = true
 			},
 			saveData() {
 				this.$u.api.familyAddOrUpdateApi({
@@ -138,6 +158,17 @@
 					}
 				})
 
+			},
+			updateData() {
+				this.$u.api.familyAddOrUpdateApi({
+					id: this.modifyData.id,
+					name: this.modifyData.name
+				}).then(res => {
+					if (res.status) {
+						this.loadFamilyList()
+						this.modifyMaskShow = false
+					}
+				})
 			},
 			/**
 			 * 搜索用户，搜索到以后才能添加，否则提示用户不能添加
