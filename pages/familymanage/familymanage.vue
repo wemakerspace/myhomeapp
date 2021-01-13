@@ -7,7 +7,7 @@
 					<text>新增家庭或者添加成员</text>
 				</view>
 				<view class="action-box">
-					<view style="display: flex;align-items: center;margin-right: 30rpx;">
+					<view style="display: flex;align-items: center;margin-right: 30rpx;" v-if="familyList.length>0">
 						<u-icon name="../../static/addfamily-64.png" @click="addUserMaskShow=true" size="40"></u-icon>
 					</view>
 					<view class="">
@@ -32,9 +32,9 @@
 						</view>
 					</view>
 				</view>
+				<!-- 无数据提示 -->
+				<u-empty text="暂无家庭数据" mode="data" v-if="familyList.length==0" style="margin-bottom: ;"></u-empty>
 			</view>
-			<!-- 无数据提示 -->
-			<u-empty text="暂无家庭数据" mode="data" v-if="familyList.length==0"></u-empty>
 		</view>
 		<!-- 添加用户mask -->
 		<u-mask :show="addUserMaskShow">
