@@ -10,10 +10,17 @@ let deviceListByRoomIdUrl = '/device/listByRoomId'
 //家庭相关
 let familyAddOrUpdateUrl = '/family/addOrUpdate'
 let familyListUrl = '/family/familyList'
+let confirmJoinUrl = '/family/confirmJoin'
+let checkIsHolerUrl = '/family/checkIsHoler'
 
 //用户相关
 let searchUserByPhoneUrl = '/user/searchUserByPhone'
 let loginByPhonePasswordUrl = '/user/loginByPhonePassword'
+
+//消息相关
+let sendFamilyAddUserUrl = '/message/sendFamilyAddUser'
+let getAllMessageUrl = '/message/getAllMessage'
+let readMessageUrl = '/message/readMessage'
 
 
 const install = (Vue, vm) => {
@@ -28,9 +35,15 @@ const install = (Vue, vm) => {
 
 	let familyAddOrUpdateApi = (params = {}) => vm.$u.post(familyAddOrUpdateUrl, params)
 	let familyListApi = (params = {}) => vm.$u.get(familyListUrl, params)
+	let confirmJoinApi = (params = {}) => vm.$u.get(confirmJoinUrl, params)
+	let checkIsHolerApi = (params = {}) => vm.$u.get(checkIsHolerUrl, params)
 
 	let searchUserByPhoneApi = (params = {}) => vm.$u.get(searchUserByPhoneUrl, params)
 	let loginByPhonePasswordApi = (params = {}) => vm.$u.post(loginByPhonePasswordUrl, params)
+
+	let sendFamilyAddUserApi = (params = {}) => vm.$u.post(sendFamilyAddUserUrl, params)
+	let getAllMessageApi = (params = {}) => vm.$u.get(getAllMessageUrl, params)
+	let readMessageApi = (params = {}) => vm.$u.get(readMessageUrl, params)
 
 
 
@@ -42,8 +55,13 @@ const install = (Vue, vm) => {
 		deviceListByRoomIdApi,
 		familyAddOrUpdateApi,
 		familyListApi,
+		confirmJoinApi,
+		checkIsHolerApi,
 		searchUserByPhoneApi,
-		loginByPhonePasswordApi
+		loginByPhonePasswordApi,
+		sendFamilyAddUserApi,
+		getAllMessageApi,
+		readMessageApi
 	}
 }
 

@@ -2,8 +2,14 @@
 	import {
 		getToken
 	} from 'utils/usertoken.js'
+	import {
+		mapMutations
+	} from 'vuex'
 	export default {
 		onLaunch: function() {
+			//1. 将本地存储信息同步到vuex
+			this.initData()
+
 			console.log('1====> App Launch,check update')
 			//应用启动时，判断是否登录，未登录的话就显示登录页面
 			if (!getToken()) {
@@ -36,7 +42,7 @@
 			console.log('3=====>App Hide')
 		},
 		methods: {
-
+			...mapMutations(['initData'])
 		}
 	}
 </script>

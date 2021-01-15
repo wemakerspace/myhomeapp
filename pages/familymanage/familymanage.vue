@@ -1,5 +1,6 @@
 <template>
 	<view class="main-container">
+		<u-toast ref="uToast" />
 		<normal-header pageName="家庭管理"></normal-header>
 		<view class="add-body">
 			<view class="header-box">
@@ -7,7 +8,7 @@
 					<text>新增家庭或者添加成员</text>
 				</view>
 				<view class="action-box">
-					<view style="display: flex;align-items: center;margin-right: 30rpx;" v-if="familyList.length>0">
+					<view style="display: flex;align-items: center;margin-right: 30rpx;" v-if="familyList.length>0&&isHolder">
 						<u-icon name="../../static/addfamily-64.png" @click="addUserMaskShow=true" size="40"></u-icon>
 					</view>
 					<view class="">
@@ -44,6 +45,7 @@
 				</view>
 				<u-field v-model="userPhone" label="手机号" placeholder="例如: 13000000000"></u-field>
 				<view style="padding-top: 40rpx;padding-bottom: 40rpx;">
+					<!-- 新增用户时先搜索然后再添加-->
 					<u-button type="success" @click="doAddUser" v-if="userExist && userPhone!=''">添加用户</u-button>
 					<u-button @click="doSearchUser" v-else :disabled="userPhone==''">搜索用户</u-button>
 				</view>
@@ -78,6 +80,10 @@
 
 <script>
 	import {
+		mapState,
+		mapMutations
+	} from 'vuex'
+	import {
 		saveSelectFamily,
 		getSelectFamily
 	} from '../../utils/cache.js'
@@ -106,10 +112,16 @@
 		},
 		watch: {
 			userPhone(nv, ov) {
-				if (this.$u.test.mobile(nv)) {}
+				if (nv == '') {
+					this.userExist = false
+				}
 			}
 		},
+		computed: {
+			...mapState(['isHolder'])
+		},
 		methods: {
+			...mapMutations(['setIsHolder']),
 			/**
 			 * 加载家庭信息
 			 */
@@ -120,6 +132,13 @@
 						//如果本地未存储同时数组不为空，则选中第一项
 						if (res.data.length > 0 && !getSelectFamily()) {
 							saveSelectFamily(res.data[0])
+							this.$u.api.checkIsHolerApi({
+								familyId: res.data[0].id
+							}).then(res => {
+								if (res.status) {
+									this.setIsHolder(res.data)
+								}
+							})
 						} else {
 							for (var i = 0; i < this.familyList.length; i++) {
 								if (this.familyList[i].id == getSelectFamily().id) {
@@ -133,6 +152,14 @@
 			cardSelected(index) {
 				this.selectedIndex = index
 				saveSelectFamily(this.familyList[index])
+				//查询用户是否是户主
+				this.$u.api.checkIsHolerApi({
+					familyId: this.familyList[index].id
+				}).then(res => {
+					if (res.status) {
+						this.setIsHolder(res.data)
+					}
+				})
 			},
 			closeMarsk() {
 				this.familyName = ''
@@ -141,6 +168,7 @@
 			closeAddUserMarsk() {
 				this.userPhone = ''
 				this.addUserMaskShow = false
+				this.userExist = false
 			},
 
 			showModifyMask(modifyData) {
@@ -182,6 +210,14 @@
 						console.log(res)
 						if (res.status) {
 							this.userExist = res.data
+							if (!res.data) {
+								this.$refs.uToast.show({
+									title: '用户不能添加',
+									type: 'warning',
+									duration: 1500,
+									position: 'top'
+								})
+							}
 						}
 
 					})
@@ -190,7 +226,22 @@
 			/**
 			 * 向用户发送添加请求
 			 */
-			doAddUser() {}
+			doAddUser() {
+				this.$u.api.sendFamilyAddUserApi({
+					toUserPhone: this.userPhone,
+					familyId: getSelectFamily().id
+				}).then(res => {
+					if (res.status) {
+						this.addUserMaskShow = false
+						this.$refs.uToast.show({
+							title: '消息已发送',
+							type: 'success',
+							duration: 1500
+						})
+					}
+
+				})
+			}
 
 		}
 	}
