@@ -6,7 +6,7 @@
 				<image src="../../static/logo.png" mode="aspectFill" style="width: 200rpx;height: 200rpx;"></image>
 			</view>
 			<view class="login-info-box">
-				<u-field v-model="loginObj.phone" label="手机号" placeholder="请填写手机号" maxlength="11" :focus="true" @blur="phoneInputBlur">
+				<u-field v-model="loginObj.phone" label="手机号" placeholder="请填写手机号" maxlength="11" @blur="phoneInputBlur">
 					<u-icon slot="icon" name="phone"></u-icon>
 				</u-field>
 				<u-field v-model="loginObj.password" label="密码" placeholder="请填写密码" type="password">
@@ -14,6 +14,10 @@
 				</u-field>
 				<view class="login-button-box">
 					<u-button type="success" class="btn" @click="doLogin">登录</u-button>
+				</view>
+				<view class="regist-box">
+					<text>忘记密码?</text>
+					<text @click="gotoRegist">立即注册</text>
 				</view>
 			</view>
 
@@ -31,9 +35,8 @@
 
 <script>
 	import {
-		saveToken,
-		getToken
-	} from '../../utils/usertoken.js'
+		mapMutations
+	} from 'vuex'
 	import CompanyInfo from '../../components/CompanyInfo.vue'
 	export default {
 		components: {
@@ -48,6 +51,7 @@
 			}
 		},
 		methods: {
+			...mapMutations(['saveLoginData', 'saveUserInfo']),
 			phoneInputBlur() {
 				if (!this.$u.test.mobile(this.loginObj.phone)) {
 					this.$refs.uToast.show({
@@ -64,9 +68,14 @@
 				if (this.$u.test.mobile(this.loginObj.phone) && this.$u.trim(this.loginObj.password) != '') {
 					this.$u.api.loginByPhonePasswordApi(this.loginObj).then(res => {
 						if (res.status) {
-							saveToken(res.data)
-							uni.reLaunch({
-								url: '../index/index'
+							this.saveLoginData(res.data)
+							this.$u.api.getUserInfoApi().then(res2 => {
+								if (res2.status) {
+									this.saveUserInfo(res2.data)
+									uni.reLaunch({
+										url: '../index/index'
+									})
+								}
 							})
 						} else {
 							this.$refs.uToast.show({
@@ -84,6 +93,14 @@
 						duration: 1500
 					})
 				}
+			},
+			/**
+			 * 显示注册页面
+			 */
+			gotoRegist() {
+				uni.navigateTo({
+					url: '../regist/regist'
+				})
 			}
 		}
 	}
@@ -118,6 +135,14 @@
 				.btn {
 					width: 600rpx;
 				}
+			}
+
+			.regist-box {
+				display: flex;
+				justify-content: space-between;
+				margin-top: 20rpx;
+				font-size: 25rpx;
+				color: #C8C9CC;
 			}
 		}
 

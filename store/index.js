@@ -4,8 +4,26 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-		familyId: '',
-		isHolder: false
+		/**
+		 * 用户登录后的token
+		 */
+		token: '',
+		/**
+		 * 用户是否是选择家庭的户主状态
+		 */
+		isHolder: false,
+		/**
+		 * 用户登录状态
+		 */
+		login: false,
+		/**
+		 * 用户信息对象
+		 */
+		userInfo: {},
+		/**
+		 * 选中家庭数据
+		 */
+		selectedFamily: {}
 
 	},
 	mutations: {
@@ -15,15 +33,35 @@ const store = new Vuex.Store({
 		 */
 		initData(state) {
 			state.isHolder = uni.getStorageSync('isHolder')
-
+			state.login = uni.getStorageSync('utoken') ? true : false
+			state.token = uni.getStorageSync('utoken')
+			state.selectedFamily = uni.getStorageSync('family')
+			state.userInfo = uni.getStorageSync('userInfo')
 		},
 		/**
-		 * 设置家庭ID
+		 * 保存登录后数据
 		 * @param {Object} state
-		 * @param {Object} fId
+		 * @param {Object} token
 		 */
-		setFamilyId(state, fId) {
-			state.familyId = fId
+		saveLoginData(state, token) {
+			state.login = true
+			state.token = token
+			uni.setStorageSync('utoken', token)
+		},
+		clearLoginData(state) {
+			//清空登录数据
+			state.login = false
+			state.token = ''
+			uni.clearStorageSync()
+		},
+		/**
+		 * 保存用户信息
+		 * @param {Object} state
+		 * @param {Object} userInfo
+		 */
+		saveUserInfo(state, userInfo) {
+			state.userInfo = userInfo
+			uni.setStorageSync('userInfo', userInfo)
 		},
 		/**
 		 * 设置是否是户主
@@ -33,6 +71,10 @@ const store = new Vuex.Store({
 		setIsHolder(state, flag) {
 			state.isHolder = flag
 			uni.setStorageSync('isHolder', flag)
+		},
+		saveSelectedFamily(state, familyObj) {
+			state.selectedFamily = familyObj
+			uni.setStorageSync('family', familyObj)
 		}
 
 	}

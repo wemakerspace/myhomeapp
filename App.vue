@@ -1,8 +1,6 @@
 <script>
 	import {
-		getToken
-	} from 'utils/usertoken.js'
-	import {
+		mapState,
 		mapMutations
 	} from 'vuex'
 	export default {
@@ -12,7 +10,7 @@
 
 			console.log('1====> App Launch,check update')
 			//应用启动时，判断是否登录，未登录的话就显示登录页面
-			if (!getToken()) {
+			if (!this.login) {
 				uni.reLaunch({
 					url: 'pages/login/login'
 				})
@@ -43,6 +41,9 @@
 		},
 		methods: {
 			...mapMutations(['initData'])
+		},
+		computed: {
+			...mapState(['login'])
 		}
 	}
 </script>

@@ -7,7 +7,7 @@
 				<u-icon name="../../static/icons/smartwatch.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
 			</u-cell-item>
 
-			<u-cell-item title="信标管理" @click="gotoBeaconManage">
+			<u-cell-item title="信标管理" @click="gotoBeaconManage" v-if="isHolder">
 				<u-icon name="../../static/icons/beacon.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
 			</u-cell-item>
 		</u-cell-group>
@@ -15,6 +15,9 @@
 </template>
 
 <script>
+	import {
+		mapState
+	} from 'vuex'
 	import NormalHeader from '../../components/NormalHeader.vue'
 	export default {
 		components: {
@@ -24,6 +27,9 @@
 			return {
 
 			}
+		},
+		computed: {
+			...mapState(['isHolder'])
 		},
 		methods: {
 			gotoWatchManage() {

@@ -131,6 +131,22 @@
 			}
 		}
 
+	}, {
+		"path": "pages/regist/regist",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+
+	}, {
+		"path": "pages/myinfo/myinfo",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+
 	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

@@ -83,10 +83,6 @@
 		mapState,
 		mapMutations
 	} from 'vuex'
-	import {
-		saveSelectFamily,
-		getSelectFamily
-	} from '../../utils/cache.js'
 	import NormalHeader from '../../components/NormalHeader.vue'
 	export default {
 		components: {
@@ -108,7 +104,6 @@
 		},
 		onShow() {
 			this.loadFamilyList()
-			console.log(getSelectFamily())
 		},
 		watch: {
 			userPhone(nv, ov) {
@@ -118,10 +113,10 @@
 			}
 		},
 		computed: {
-			...mapState(['isHolder'])
+			...mapState(['isHolder', 'selectedFamily'])
 		},
 		methods: {
-			...mapMutations(['setIsHolder']),
+			...mapMutations(['setIsHolder', 'saveSelectedFamily']),
 			/**
 			 * 加载家庭信息
 			 */
@@ -129,9 +124,9 @@
 				this.$u.api.familyListApi().then(res => {
 					if (res.status) {
 						this.familyList = res.data
-						//如果本地未存储同时数组不为空，则选中第一项
-						if (res.data.length > 0 && !getSelectFamily()) {
-							saveSelectFamily(res.data[0])
+						//默认选中第一项
+						if (res.data.length > 0 && !this.selectedFamily) {
+							this.saveSelectedFamily(res.data[0])
 							this.$u.api.checkIsHolerApi({
 								familyId: res.data[0].id
 							}).then(res => {
@@ -141,7 +136,7 @@
 							})
 						} else {
 							for (var i = 0; i < this.familyList.length; i++) {
-								if (this.familyList[i].id == getSelectFamily().id) {
+								if (this.familyList[i].id == this.selectedFamily.id) {
 									this.selectedIndex = i
 								}
 							}
@@ -151,7 +146,7 @@
 			},
 			cardSelected(index) {
 				this.selectedIndex = index
-				saveSelectFamily(this.familyList[index])
+				this.saveSelectedFamily(this.familyList[index])
 				//查询用户是否是户主
 				this.$u.api.checkIsHolerApi({
 					familyId: this.familyList[index].id
@@ -229,7 +224,7 @@
 			doAddUser() {
 				this.$u.api.sendFamilyAddUserApi({
 					toUserPhone: this.userPhone,
-					familyId: getSelectFamily().id
+					familyId: this.selectedFamily.id
 				}).then(res => {
 					if (res.status) {
 						this.addUserMaskShow = false

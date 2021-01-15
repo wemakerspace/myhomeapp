@@ -16,6 +16,9 @@ let checkIsHolerUrl = '/family/checkIsHoler'
 //用户相关
 let searchUserByPhoneUrl = '/user/searchUserByPhone'
 let loginByPhonePasswordUrl = '/user/loginByPhonePassword'
+let registByPhonePasswordUrl = '/user/registByPhonePassword'
+let getUserInfoUrl = '/user/getUserInfo'
+let updateUserInfoUrl = '/user/updateUserInfo'
 
 //消息相关
 let sendFamilyAddUserUrl = '/message/sendFamilyAddUser'
@@ -40,6 +43,9 @@ const install = (Vue, vm) => {
 
 	let searchUserByPhoneApi = (params = {}) => vm.$u.get(searchUserByPhoneUrl, params)
 	let loginByPhonePasswordApi = (params = {}) => vm.$u.post(loginByPhonePasswordUrl, params)
+	let registByPhonePasswordApi = (params = {}) => vm.$u.post(registByPhonePasswordUrl, params)
+	let getUserInfoApi = (params = {}) => vm.$u.get(getUserInfoUrl, params)
+	let updateUserInfoApi = (params = {}) => vm.$u.post(updateUserInfoUrl, params)
 
 	let sendFamilyAddUserApi = (params = {}) => vm.$u.post(sendFamilyAddUserUrl, params)
 	let getAllMessageApi = (params = {}) => vm.$u.get(getAllMessageUrl, params)
@@ -59,6 +65,9 @@ const install = (Vue, vm) => {
 		checkIsHolerApi,
 		searchUserByPhoneApi,
 		loginByPhonePasswordApi,
+		registByPhonePasswordApi,
+		getUserInfoApi,
+		updateUserInfoApi,
 		sendFamilyAddUserApi,
 		getAllMessageApi,
 		readMessageApi

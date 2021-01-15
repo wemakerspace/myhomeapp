@@ -14,23 +14,23 @@
 				</view>
 			</view>
 			<view class="avatar-box-wrapper">
-				<view class="avatar-box">
-					<u-avatar :src="avatarUrl"></u-avatar>
-					<text>大熊熊</text>
+				<view class="avatar-box" @click="gotoInfoPage">
+					<u-avatar :src="userInfo.avatar"></u-avatar>
+					<text>{{userInfo.name}}</text>
 					<u-tag text="户主" type="info" size="mini" v-if="isHolder" />
 				</view>
 			</view>
 		</view>
 		<!-- 体 -->
 		<u-cell-group>
+			<u-cell-item title="家庭管理" @click="gotoFamilyManage">
+				<u-icon name="../../static/icons/familly.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
+			</u-cell-item>
 			<u-cell-item title="楼层管理" @click="gotoFloorManage" v-show="isHolder">
 				<u-icon name="../../static/icons/floor.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
 			</u-cell-item>
 			<u-cell-item title="房间管理" @click="gotoRoomManage" v-show="isHolder">
 				<u-icon name="../../static/icons/rooms.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
-			</u-cell-item>
-			<u-cell-item title="家庭管理" @click="gotoFamilyManage">
-				<u-icon name="../../static/icons/familly.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
 			</u-cell-item>
 			<u-cell-item title="设备管理" @click="gotoDeviceManage" v-show="isHolder">
 				<u-icon name="../../static/icons/device.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
@@ -50,13 +50,10 @@
 	} from 'vuex'
 	export default {
 		data() {
-			return {
-				avatarUrl: 'http://pic2.sc.chinaz.com/Files/pic/pic9/202002/hpic2119_s.jpg'
-
-			}
+			return {}
 		},
 		computed: {
-			...mapState(['isHolder'])
+			...mapState(['isHolder', 'userInfo'])
 		},
 		methods: {
 			gotoFloorManage() {
@@ -105,6 +102,11 @@
 			showSettingPage() {
 				uni.navigateTo({
 					url: '../setting/setting'
+				})
+			},
+			gotoInfoPage() {
+				uni.navigateTo({
+					url: '../myinfo/myinfo'
 				})
 			}
 		}

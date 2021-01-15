@@ -16,10 +16,10 @@
 </template>
 
 <script>
-	import NormalHeader from '../../components/NormalHeader.vue'
 	import {
-		clear
-	} from '../../utils/usertoken.js'
+		mapMutations
+	} from 'vuex'
+	import NormalHeader from '../../components/NormalHeader.vue'
 	export default {
 		components: {
 			NormalHeader
@@ -30,6 +30,7 @@
 			}
 		},
 		methods: {
+			...mapMutations(['clearLoginData']),
 			/**
 			 * 跳转系统信息页
 			 */
@@ -42,7 +43,7 @@
 			 * 退出系统
 			 */
 			doLogOut() {
-				clear()
+				this.clearLoginData()
 				//跳转到登录页
 				uni.reLaunch({
 					url: '../login/login'

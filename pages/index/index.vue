@@ -90,9 +90,6 @@
 		},
 		onShow() {
 			this.loadFloorList()
-
-			console.log(plus.device.getVolume())
-
 		},
 		methods: {
 			/**
