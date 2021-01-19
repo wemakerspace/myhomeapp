@@ -8,8 +8,8 @@
 				</view>
 				<view class="action-box">
 					<view class="" style="display: flex;align-items: center;margin-right: 30rpx;">
-						<text style="font-size: 20rpx;margin-right: 10rpx;">{{selectedFloor.label?selectedFloor.label:'选择楼层'}}</text>
-						<u-icon name="arrow-down-fill" @click="floorSelectShow=true" size="25"></u-icon>
+						<text style="font-size: 22rpx;margin-right: 10rpx;">{{selectedFloor.label?selectedFloor.label:'选择楼层'}}</text>
+						<u-icon name="arrow-down-fill" @click="floorSelectShow=true" size="30"></u-icon>
 					</view>
 					<view class="">
 						<u-icon name="plus" @click="showAddMask" size="40" :color="selectedFloor.label?'#303030':'#c8c9cc'"></u-icon>
@@ -56,6 +56,9 @@
 </template>
 
 <script>
+	import {
+		mapState
+	} from 'vuex'
 	import NormalHeader from '../../components/NormalHeader.vue'
 	export default {
 		components: {
@@ -76,6 +79,9 @@
 		onShow() {
 			this.loadFloorList()
 		},
+		computed: {
+			...mapState(['selectedFamily'])
+		},
 		methods: {
 			/**
 			 * 显示新增框，必须要在选择楼层后才能显示
@@ -88,7 +94,8 @@
 			saveData() {
 				this.$u.api.roomAddOrUpdateApi({
 					name: this.roomName,
-					floorId: this.selectedFloor.value
+					floorId: this.selectedFloor.value,
+					familyId: this.selectedFamily.id
 				}).then(res => {
 					if (res.status) {
 						this.loadRoomsByFloorId(this.selectedFloor.value)
@@ -113,7 +120,9 @@
 			 * 加载所有楼层信息
 			 */
 			loadFloorList() {
-				this.$u.api.floorListApi().then(res => {
+				this.$u.api.floorListApi({
+					familyId: this.selectedFamily.id
+				}).then(res => {
 					if (res.status) {
 						this.floorList = res.data
 					}

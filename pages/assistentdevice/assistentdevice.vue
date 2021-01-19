@@ -6,10 +6,9 @@
 			<u-cell-item title="手环管理" @click="gotoWatchManage">
 				<u-icon name="../../static/icons/smartwatch.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
 			</u-cell-item>
-
-			<u-cell-item title="信标管理" @click="gotoBeaconManage" v-if="isHolder">
+		<!-- 	<u-cell-item title="信标管理" @click="gotoBeaconManage" v-if="isHolder">
 				<u-icon name="../../static/icons/beacon.png" slot="icon" size="34" style="margin-right: 10rpx;"></u-icon>
-			</u-cell-item>
+			</u-cell-item> -->
 		</u-cell-group>
 	</view>
 </template>

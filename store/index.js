@@ -23,7 +23,12 @@ const store = new Vuex.Store({
 		/**
 		 * 选中家庭数据
 		 */
-		selectedFamily: {}
+		selectedFamily: {},
+		/**
+		 * 被选中的楼层ID
+		 */
+		selectedFloorId: '',
+		selectedRoomId: ''
 
 	},
 	mutations: {
@@ -37,6 +42,7 @@ const store = new Vuex.Store({
 			state.token = uni.getStorageSync('utoken')
 			state.selectedFamily = uni.getStorageSync('family')
 			state.userInfo = uni.getStorageSync('userInfo')
+			state.selectedFloorId = uni.getStorageSync('floorId')
 		},
 		/**
 		 * 保存登录后数据
@@ -75,6 +81,13 @@ const store = new Vuex.Store({
 		saveSelectedFamily(state, familyObj) {
 			state.selectedFamily = familyObj
 			uni.setStorageSync('family', familyObj)
+		},
+		saveSelectedFloorId(state, floorId) {
+			state.selectedFloorId = floorId
+			uni.setStorageSync('floorId', floorId)
+		},
+		saveSelectedRoomId(state, roomId) {
+			state.selectedRoomId = roomId
 		}
 
 	}

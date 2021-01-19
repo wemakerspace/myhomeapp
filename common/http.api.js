@@ -4,8 +4,11 @@ let floorListUrl = '/floor/list'
 //room相关
 let roomAddOrUpdateUrl = '/room/addOrUpdate'
 let roomListByFloorIdUrl = '/room/listByFloorId'
+let listAllByFamilyIdUrl = '/room/listAllByFamilyId'
+
 //device相关
 let deviceListByRoomIdUrl = '/device/listByRoomId'
+let changeFavoriteUrl = '/device/changeFavorite'
 
 //家庭相关
 let familyAddOrUpdateUrl = '/family/addOrUpdate'
@@ -33,8 +36,10 @@ const install = (Vue, vm) => {
 
 	let roomAddOrUpdateApi = (params = {}) => vm.$u.post(roomAddOrUpdateUrl, params)
 	let roomListByFloorIdApi = (params = {}) => vm.$u.get(roomListByFloorIdUrl, params)
+	let listAllByFamilyIdApi = (params = {}) => vm.$u.get(listAllByFamilyIdUrl, params)
 
 	let deviceListByRoomIdApi = (params = {}) => vm.$u.get(deviceListByRoomIdUrl, params)
+	let changeFavoriteApi = (params = {}) => vm.$u.post(changeFavoriteUrl, params)
 
 	let familyAddOrUpdateApi = (params = {}) => vm.$u.post(familyAddOrUpdateUrl, params)
 	let familyListApi = (params = {}) => vm.$u.get(familyListUrl, params)
@@ -58,7 +63,9 @@ const install = (Vue, vm) => {
 		floorListApi,
 		roomAddOrUpdateApi,
 		roomListByFloorIdApi,
+		listAllByFamilyIdApi,
 		deviceListByRoomIdApi,
+		changeFavoriteApi,
 		familyAddOrUpdateApi,
 		familyListApi,
 		confirmJoinApi,

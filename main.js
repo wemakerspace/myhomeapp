@@ -6,6 +6,12 @@ Vue.config.productionTip = false
 import uView from "uview-ui"
 Vue.use(uView)
 
+import GoEasy from 'goeasy'
+Vue.prototype.goEasy = GoEasy.getInstance({
+	host: 'hangzhou.goeasy.io',
+	appkey: "BS-0caadcc4d28449dfba6e5d50cc6e1ef8"
+})
+
 App.mpType = 'app'
 
 //引入vuex

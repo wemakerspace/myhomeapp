@@ -14,6 +14,18 @@
 				uni.reLaunch({
 					url: 'pages/login/login'
 				})
+			} else {
+				this.goEasy.connect({
+					onSuccess: function() { //连接成功
+						console.log("GoEasy connect successfully.") //连接成功
+					},
+					onFailed: function(error) { //连接失败
+						console.log("Failed to connect GoEasy, code:" + error.code + ",error:" + error.content);
+					},
+					onProgress: function(attempts) { //连接或自动重连中
+						console.log("GoEasy is connecting", attempts);
+					}
+				})
 			}
 			// uni.openBluetoothAdapter({
 			// 	success() {
@@ -34,16 +46,29 @@
 		},
 		onShow: function() {
 			console.log('2=====>App Show')
+			//打开websocket连接
+			// this.initWebSocket()
+
 
 		},
 		onHide: function() {
 			console.log('3=====>App Hide')
+			//关闭websocket连接
+			console.log('影藏', this.goEasy)
+			// this.goEasy.disconnect({
+			// 	onSuccess: function() {
+			// 		console.log("GoEasy disconnect successfully.")
+			// 	},
+			// 	onFailed: function(error) {
+			// 		console.log("Failed to disconnect GoEasy, code:" + error.code + ",error:" + error.content);
+			// 	}
+			// })
 		},
 		methods: {
 			...mapMutations(['initData'])
 		},
 		computed: {
-			...mapState(['login'])
+			...mapState(['login', 'selectedFamily', 'token'])
 		}
 	}
 </script>

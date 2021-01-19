@@ -1,17 +1,18 @@
 <template>
 	<view class="main-container">
-		<common-header :floorArray="floorList" :roomArray="roomList" @floorSelect="floorSelect" @roomSelect="roomSelect"></common-header>
+		<common-header :floorArray="floorList" :roomArray="roomList" @floorSelect="floorSelect" @roomSelect="roomSelect"
+		 :selectedFloorId="selectedFloorId" :selectedRoomId="selectedRoomId"></common-header>
 		<view class="main-box">
 			<view class="device-line">
 				<view class="device-card" v-for="device in deviceList" :key="device.id">
 					<view class="collect-box">
-						<u-icon :name="device.favorite?'star-fill':'star'" size="40" :color="device.favorite?'#F29100':'#c8c9cc'" @click="device.favorite= (!device.favorite)"></u-icon>
+						<u-icon :name="device.favorite?'star-fill':'star'" size="40" :color="device.favorite?'#F29100':'#c8c9cc'" @click="changeFavorite(device)"></u-icon>
 					</view>
 					<view class="icon-name-box">
-						<u-image width="100rpx" height="100rpx" :src="device.open?'../../static/device/'+device.iconActivePath:'../../static/device/'+device.iconPath"></u-image>
+						<u-image width="100rpx" height="100rpx" :src="device.open?'../../static/device/'+device.iconPath+'-active.png':'../../static/device/'+device.iconPath+'.png'"></u-image>
 						<text>{{device.name}}</text>
 						<text class="openText" v-if="device.type==1">{{device.open?'打开':'关闭'}}</text>
-						<text class="openText" v-if="device.type==2">{{rateDevice.rate}}%</text>
+						<text class="openText" v-if="device.type==2">{{device.rate}}%</text>
 					</view>
 					<!-- 开关型设备 -->
 					<view class="action-box" v-if="device.type==1">
@@ -19,7 +20,7 @@
 					</view>
 					<!-- 比例型设备 -->
 					<view class="action-rate-box" v-if="device.type==2">
-						<u-slider v-model="rateDevice.rate" step="10" height="50" activeColor="#42B983" block-width="55"></u-slider>
+						<u-slider v-model="device.rate" step="10" height="50" activeColor="#42B983" block-width="55"></u-slider>
 					</view>
 				</view>
 				<view class="no-device-wrapper" v-if="deviceList.length==0">
@@ -53,6 +54,10 @@
 </template>
 
 <script>
+	import {
+		mapState,
+		mapMutations
+	} from 'vuex'
 	import CommonHeader from "../../components/CommonHeader.vue"
 	export default {
 		components: {
@@ -65,38 +70,72 @@
 				//房间集合
 				roomList: [],
 				//设备集合
-				deviceList: [],
-				//开关型设置
-				singleDevice: {
-					id: '112233',
-					name: '顶部吊灯',
-					favorite: true,
-					open: true,
-					iconPath: '../../static/device/lamp.png',
-					iconActivePath: '../../static/device/lamp-active.png'
-				},
-				//比例型设置
-				rateDevice: {
-					id: '112233',
-					name: '百叶窗',
-					favorite: true,
-					open: true,
-					rate: 50,
-					iconPath: '../../static/device/window.png',
-					iconActivePath: '../../static/device/window-active.png'
-				}
-
+				deviceList: []
 			}
 		},
 		onShow() {
 			this.loadFloorList()
+			this.goEasy.subscribe({
+				channel: this.selectedFamily.id,
+				onMessage: function(message) {
+					console.log("Channel:" + message.channel + " content111111111111:" + message.content);
+				},
+				onSuccess: function() {
+					console.log("Channel订阅成功。");
+				},
+				onFailed: function(error) {
+					console.log("Channel订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
+				}
+			})
+			var that = this
+			this.goEasy.subscribe({
+				channel: 'floor' + that.selectedFamily.id,
+				onMessage: function(message) {
+					let jsonString = message.content
+					let receiveObj = JSON.parse(jsonString)
+					console.log('楼层：', receiveObj)
+					that.saveSelectedFloorId(receiveObj.floorId)
+
+				},
+				onSuccess: function() {
+					console.log("Channe2订阅成功。");
+				},
+				onFailed: function(error) {
+					console.log("Channel订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
+				}
+			})
+			this.goEasy.subscribe({
+				channel: 'room' + that.selectedFamily.id,
+				onMessage: function(message) {
+					let jsonString = message.content
+					let receiveObj = JSON.parse(jsonString)
+					console.log('房间：', receiveObj)
+					that.saveSelectedRoomId(receiveObj.roomId)
+
+				},
+				onSuccess: function() {
+					console.log("Channe2订阅成功。");
+				},
+				onFailed: function(error) {
+					console.log("Channel订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
+				}
+			})
+		},
+		onHide() {
+			console.log('页面隐藏')
+		},
+		computed: {
+			...mapState(['selectedFamily', 'selectedFloorId', 'selectedRoomId'])
 		},
 		methods: {
+			...mapMutations(['saveSelectedFloorId', 'saveSelectedRoomId']),
 			/**
 			 * 加载所有楼层信息
 			 */
 			loadFloorList() {
-				this.$u.api.floorListApi().then(res => {
+				this.$u.api.floorListApi({
+					familyId: this.selectedFamily.id
+				}).then(res => {
 					if (res.status) {
 						this.floorList = res.data
 					}
@@ -114,12 +153,16 @@
 					}
 				})
 			},
+			/**
+			 * 根据房间ID查询所有设备列表
+			 * @param {Object} roomId
+			 */
 			loadDeviceByRoomSelectd(roomId) {
 				this.$u.api.deviceListByRoomIdApi({
+					familyId: this.selectedFamily.id,
 					roomId: roomId,
 					favorite: true
 				}).then(res => {
-					console.log(res.data.length, '==')
 					if (res.status) {
 						this.deviceList = res.data
 					}
@@ -132,6 +175,8 @@
 			 */
 			floorSelect(e) {
 				this.loadRoomListByFloorId(e)
+				this.saveSelectedFloorId(e)
+
 			},
 			/**
 			 * 房间选择
@@ -139,10 +184,25 @@
 			 */
 			roomSelect(e) {
 				this.loadDeviceByRoomSelectd(e)
+				this.saveSelectedRoomId(e)
 			},
 			gotoDeviceManage() {
 				uni.navigateTo({
 					url: '../devicemanage/devicemanage'
+				})
+			},
+			/**
+			 * 改变设备的收藏状态
+			 * @param {Object} deviceData
+			 */
+			changeFavorite(deviceData) {
+				this.$u.api.changeFavoriteApi({
+					id: deviceData.id,
+					favorite: !deviceData.favorite
+				}).then(res => {
+					if (res.status) {
+						this.loadDeviceByRoomSelectd(this.selectedRoomId)
+					}
 				})
 			}
 

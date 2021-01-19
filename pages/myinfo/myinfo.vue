@@ -54,7 +54,6 @@
 					}).then(res => {
 						if (res.status) {
 							let middleObj = this.userInfo
-							console.log('====-============>', middleObj)
 							middleObj.name = this.uname
 							this.saveUserInfo(middleObj)
 							this.modifyMaskShow = false

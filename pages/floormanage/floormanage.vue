@@ -50,6 +50,9 @@
 </template>
 
 <script>
+	import {
+		mapState
+	} from 'vuex'
 	import NormalHeader from '../../components/NormalHeader.vue'
 	export default {
 		components: {
@@ -64,9 +67,11 @@
 				modifyFloorData: {}
 			}
 		},
+		computed: {
+			...mapState(['selectedFamily'])
+		},
 		onShow() {
 			this.loadData()
-
 		},
 		methods: {
 			closeMarsk() {
@@ -77,7 +82,9 @@
 			 * 从本地获取楼层信息，如果没有去云端查询后保存在本地
 			 */
 			loadData() {
-				this.$u.api.floorListApi().then(res => {
+				this.$u.api.floorListApi({
+					familyId: this.selectedFamily.id
+				}).then(res => {
 					if (res.status) {
 						this.floorArray = res.data
 					}
@@ -86,7 +93,8 @@
 			saveFloor() {
 				if (this.floorName && this.$u.trim(this.floorName) != '') {
 					this.$u.api.floorAddOrUpdateApi({
-						name: this.floorName
+						name: this.floorName,
+						familyId: this.selectedFamily.id
 					}).then(res => {
 						if (res.status) {
 							this.addMaskShow = false
