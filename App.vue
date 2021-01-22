@@ -5,6 +5,8 @@
 	} from 'vuex'
 	export default {
 		onLaunch: function() {
+			//锁定屏幕不旋转
+			plus.screen.lockOrientation('portrait-primary')
 			//1. 将本地存储信息同步到vuex
 			this.initData()
 
