@@ -1,30 +1,37 @@
 <template>
 	<view class="main-container">
 		<common-header :floorArray="floorList" :roomArray="roomList" @floorSelect="floorSelect" @roomSelect="roomSelect"
-		 :selectedFloorId="selectedFloorId" :selectedRoomId="selectedRoomId"></common-header>
+		 :selectedFloorId="selectedFloorId" :selectedRoomId="selectedRoomId" @searchConfirm="doSearchDevice"></common-header>
 		<view class="main-box">
 			<view class="device-line">
-				<view class="device-card" v-for="device in deviceList" :key="device.id">
+				<view class="device-card" v-for="device in realDeviceList" :key="device.id">
 					<view class="collect-box">
 						<u-icon :name="device.favorite?'star-fill':'star'" size="40" :color="device.favorite?'#F29100':'#c8c9cc'" @click="changeFavorite(device)"></u-icon>
 					</view>
 					<view class="icon-name-box">
 						<u-image width="100rpx" height="100rpx" :src="device.open?'../../static/device/'+device.iconPath+'-active.png':'../../static/device/'+device.iconPath+'.png'"></u-image>
 						<text>{{device.name}}</text>
-						<text class="openText" v-if="device.type==1">{{device.open?'打开':'关闭'}}</text>
-						<text class="openText" v-if="device.type==2">{{device.rate}}%</text>
+						<text class="openText" v-if="device.type==12">{{device.open?'打开':'关闭'}}</text>
+						<text class="openText" v-if="device.type==13">{{device.rate}}%</text>
 					</view>
 					<!-- 开关型设备 -->
-					<view class="action-box" v-if="device.type==1">
-						<u-switch v-model="device.open" active-color="#42B983" size="50" :loading="false"></u-switch>
+					<view class="action-box" v-if="device.type==12">
+						<u-switch v-model="device.open" active-color="#42B983" size="50" :loading="false" @change="doControlDevice(device)"></u-switch>
 					</view>
 					<!-- 比例型设备 -->
-					<view class="action-rate-box" v-if="device.type==2">
-						<u-slider v-model="device.rate" step="10" height="50" activeColor="#42B983" block-width="55"></u-slider>
+					<view class="action-rate-box" v-if="device.type==13">
+						<u-slider v-model="device.rate" height="50" activeColor="#42B983" block-width="50" @end="doControlDevice(device)"></u-slider>
 					</view>
 				</view>
+				<!-- 无设备提示 -->
 				<view class="no-device-wrapper" v-if="deviceList.length==0">
 					<u-empty src="../../static/device-64.png" text="无设备">
+						<u-button type="success" slot="bottom" style="margin-top: 50rpx;" @click="gotoDeviceManage">添加设备</u-button>
+					</u-empty>
+				</view>
+				<!-- 未搜索到设备提示 -->
+				<view class="no-device-wrapper" v-if="deviceList.length!=0&&realDeviceList.length==0">
+					<u-empty src="../../static/device-64.png" text="未搜索到设备">
 						<u-button type="success" slot="bottom" style="margin-top: 50rpx;" @click="gotoDeviceManage">添加设备</u-button>
 					</u-empty>
 				</view>
@@ -70,24 +77,17 @@
 				//房间集合
 				roomList: [],
 				//设备集合
-				deviceList: []
-
+				deviceList: [],
+				//真实设备集合（搜索以后的）
+				realDeviceList: []
 			}
 		},
 		onShow() {
 			this.loadFloorList()
-			var that = this
 			this.goEasy.subscribe({
 				channel: this.selectedFamily.id,
 				onMessage: function(message) {
-					let jsonString = message.content
-					let receiveObj = JSON.parse(jsonString)
-					for (var i = 0; i < that.deviceList.length; i++) {
-						if (that.deviceList[i].id == receiveObj.id) {
-							that.$set(that.deviceList, i, receiveObj)
-						}
-					}
-
+					console.log("Channel:" + message.channel + " content111111111111:" + message.content);
 				},
 				onSuccess: function() {
 					console.log("Channel订阅成功。");
@@ -96,9 +96,42 @@
 					console.log("Channel订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
 				}
 			})
+			var that = this
+			this.goEasy.subscribe({
+				channel: 'floor' + that.selectedFamily.id,
+				onMessage: function(message) {
+					let jsonString = message.content
+					let receiveObj = JSON.parse(jsonString)
+					console.log('楼层：', receiveObj)
+					that.saveSelectedFloorId(receiveObj.floorId)
+
+				},
+				onSuccess: function() {
+					console.log("Channe2订阅成功。");
+				},
+				onFailed: function(error) {
+					console.log("Channel订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
+				}
+			})
+			this.goEasy.subscribe({
+				channel: 'room' + that.selectedFamily.id,
+				onMessage: function(message) {
+					let jsonString = message.content
+					let receiveObj = JSON.parse(jsonString)
+					console.log('房间：', receiveObj)
+					that.saveSelectedRoomId(receiveObj.roomId)
+
+				},
+				onSuccess: function() {
+					console.log("Channe2订阅成功。");
+				},
+				onFailed: function(error) {
+					console.log("Channel订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
+				}
+			})
 		},
 		onHide() {
-			console.log('页面隐藏111')
+			console.log('页面隐藏')
 		},
 		computed: {
 			...mapState(['selectedFamily', 'selectedFloorId', 'selectedRoomId'])
@@ -123,9 +156,16 @@
 				}).then(res => {
 					if (res.status) {
 						this.roomList = res.data
+						if (res.data.length == 0) {
+							this.deviceList = []
+						}
 					}
 				})
 			},
+			/**
+			 * 根据房间ID查询所有设备列表
+			 * @param {Object} roomId
+			 */
 			loadDeviceByRoomSelectd(roomId) {
 				this.$u.api.deviceListByRoomIdApi({
 					familyId: this.selectedFamily.id,
@@ -134,6 +174,7 @@
 				}).then(res => {
 					if (res.status) {
 						this.deviceList = res.data
+						this.realDeviceList = res.data
 					}
 
 				})
@@ -143,8 +184,9 @@
 			 * @param {Object} e 楼层ID
 			 */
 			floorSelect(e) {
-				this.saveSelectedFloorId(e)
 				this.loadRoomListByFloorId(e)
+				this.saveSelectedFloorId(e)
+
 			},
 			/**
 			 * 房间选择
@@ -152,6 +194,7 @@
 			 */
 			roomSelect(e) {
 				this.loadDeviceByRoomSelectd(e)
+				this.saveSelectedRoomId(e)
 			},
 			gotoDeviceManage() {
 				uni.navigateTo({
@@ -171,6 +214,33 @@
 						this.loadDeviceByRoomSelectd(this.selectedRoomId)
 					}
 				})
+			},
+			/**
+			 * 控制设备
+			 * @param {Object} device
+			 */
+			doControlDevice(device) {
+				this.$u.api.doControlApi(device).then(res => {
+					if (res.status) {
+						console.log('成功')
+					}
+				})
+			},
+			/**
+			 * 本地搜索设备
+			 */
+			doSearchDevice(searchKey) {
+				if (searchKey == '') {
+					this.realDeviceList = this.deviceList
+				} else {
+					this.realDeviceList = []
+					for (var i = 0; i < this.deviceList.length; i++) {
+						if (this.deviceList[i].name.indexOf(searchKey) != -1) {
+							this.realDeviceList.push(this.deviceList[i])
+						}
+
+					}
+				}
 			}
 
 		}

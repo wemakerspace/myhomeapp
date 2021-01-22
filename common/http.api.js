@@ -9,6 +9,7 @@ let listAllByFamilyIdUrl = '/room/listAllByFamilyId'
 //device相关
 let deviceListByRoomIdUrl = '/device/listByRoomId'
 let changeFavoriteUrl = '/device/changeFavorite'
+let doControlUrl = '/device/doControl'
 
 //家庭相关
 let familyAddOrUpdateUrl = '/family/addOrUpdate'
@@ -40,6 +41,7 @@ const install = (Vue, vm) => {
 
 	let deviceListByRoomIdApi = (params = {}) => vm.$u.get(deviceListByRoomIdUrl, params)
 	let changeFavoriteApi = (params = {}) => vm.$u.post(changeFavoriteUrl, params)
+	let doControlApi = (params = {}) => vm.$u.post(doControlUrl, params)
 
 	let familyAddOrUpdateApi = (params = {}) => vm.$u.post(familyAddOrUpdateUrl, params)
 	let familyListApi = (params = {}) => vm.$u.get(familyListUrl, params)
@@ -66,6 +68,7 @@ const install = (Vue, vm) => {
 		listAllByFamilyIdApi,
 		deviceListByRoomIdApi,
 		changeFavoriteApi,
+		doControlApi,
 		familyAddOrUpdateApi,
 		familyListApi,
 		confirmJoinApi,

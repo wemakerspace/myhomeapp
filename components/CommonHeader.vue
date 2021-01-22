@@ -1,15 +1,19 @@
 <template>
 	<view class="header-box">
 		<view class="header-wrapper">
-			<view class="search-box">
-				<u-icon name="search"></u-icon>
+			<view class="search-box" :style="{'width':(searchShow?'80%':'20%')}">
+				<u-icon name="search" size="35" @click="searchShow = (!searchShow)"></u-icon>
+				<view style="width: 65%;margin-left: 30rpx;" v-show="searchShow">
+					<u-input v-model="searchInput" type="text" placeholder="请输入设备名" maxlength="10" :border="true" height="50" :trim="true"
+					 :focus="searchShow" confirm-type="search" @confirm="searchConfirm" @clear="clearConfirm" />
+				</view>
 			</view>
-			<view class="slogan-box">
+			<view class="slogan-box" v-show="!searchShow">
 				<text>MyHome</text>
 			</view>
 			<view class="select-box">
-				<text style="font-size: 20rpx;margin-right: 10rpx;">{{selectedFloor.label?selectedFloor.label:'选择楼层'}}</text>
-				<u-icon name="arrow-down-fill" size="30" color="#c8c9cc" @click="selectFloorSelectShow"></u-icon>
+				<text style="font-size: 24rpx;margin-right: 10rpx;">{{selectedFloor.label?selectedFloor.label:'选择楼层'}}</text>
+				<u-icon name="arrow-down-fill" size="35" color="#c8c9cc" @click="selectFloorSelectShow"></u-icon>
 				<u-select v-model="selectFloorShow" :list="floorArray" value-name="id" label-name="name" @confirm="selectConfirm"
 				 :default-value="[selectedFloorIndex]"></u-select>
 			</view>
@@ -107,7 +111,9 @@
 				selectedFloor: {},
 				selectFloorShow: false,
 				selectedRoomIndex: 0,
-				selectedFloorIndex: 0
+				selectedFloorIndex: 0,
+				searchShow: false,
+				searchInput: ''
 			}
 		},
 		methods: {
@@ -134,6 +140,15 @@
 			selectFloorSelectShow() {
 				this.selectFloorShow = true && this.floorArray.length != 0
 
+			},
+			searchConfirm() {
+				this.$emit('searchConfirm', this.searchInput)
+				this.searchShow = false
+			},
+			clearConfirm() {
+				this.$emit('searchConfirm', '')
+				this.searchInput = ''
+				this.searchShow = false
 			}
 		}
 	}
@@ -150,11 +165,11 @@
 			align-items: center;
 			padding-left: 30rpx;
 			padding-right: 30rpx;
+			height: 35rpx;
 
 			.search-box {
 				display: flex;
 				align-items: center;
-				width: 20%;
 			}
 
 

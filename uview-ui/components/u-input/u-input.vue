@@ -1,38 +1,18 @@
 <template>
-	<view
-		class="u-input"
-		:class="{
+	<view class="u-input" :class="{
 			'u-input--border': border,
 			'u-input--error': validateState
-		}"
-		:style="{
+		}" :style="{
 			padding: `0 ${border ? 20 : 0}rpx`,
 			borderColor: borderColor,
 			textAlign: inputAlign
 		}"
-		@tap.stop="inputClick"
-	>
-		<textarea
-			v-if="type == 'textarea'"
-			class="u-input__input u-input__textarea"
-			:style="[getStyle]"
-			:value="defaultValue"
-			:placeholder="placeholder"
-			:placeholderStyle="placeholderStyle"
-			:disabled="disabled"
-			:maxlength="inputMaxlength"
-			:fixed="fixed"
-			:focus="focus"
-			:autoHeight="autoHeight"
-			:selection-end="uSelectionEnd"
-			:selection-start="uSelectionStart"
-			:cursor-spacing="getCursorSpacing"
-			:show-confirm-bar="showConfirmbar"
-			@input="handleInput"
-			@blur="handleBlur"
-			@focus="onFocus"
-			@confirm="onConfirm"
-		/>
+	 @tap.stop="inputClick">
+		<textarea v-if="type == 'textarea'" class="u-input__input u-input__textarea" :style="[getStyle]" :value="defaultValue"
+		 :placeholder="placeholder" :placeholderStyle="placeholderStyle" :disabled="disabled" :maxlength="inputMaxlength"
+		 :fixed="fixed" :focus="focus" :autoHeight="autoHeight" :selection-end="uSelectionEnd" :selection-start="uSelectionStart"
+		 :cursor-spacing="getCursorSpacing" :show-confirm-bar="showConfirmbar" @input="handleInput" @blur="handleBlur" @focus="onFocus"
+		 @confirm="onConfirm" />
 		<input
 			v-else
 			class="u-input__input"
@@ -326,7 +306,7 @@ export default {
 			this.$emit('confirm', e.detail.value);
 		},
 		onClear(event) {
-			this.$emit('input', '');
+			this.$emit('clear');
 		},
 		inputClick() {
 			this.$emit('click');
@@ -360,9 +340,10 @@ export default {
 	}
 
 	&--border {
-		border-radius: 6rpx;
-		border-radius: 4px;
-		border: 1px solid $u-form-item-border-color;
+		// border-radius: 6rpx;
+		// border-radius: 4px;
+		border-bottom: 1px solid $u-form-item-border-color;
+		// border: 1px solid $u-form-item-border-color;
 	}
 
 	&--error {
