@@ -1,43 +1,45 @@
 <template>
-	<view class="main-container">
+	<view style="height: 100%;">
 		<common-header :floorArray="floorList" :roomArray="roomList" @floorSelect="floorSelect" @roomSelect="roomSelect"
 		 :selectedFloorId="selectedFloorId" :selectedRoomId="selectedRoomId" @searchConfirm="doSearchDevice"></common-header>
-		<view class="main-box">
-			<view class="device-line">
-				<view class="device-card" v-for="(device,index) in realDeviceList" :key="device.id">
-					<view class="collect-box">
-						<u-icon :name="device.favorite?'star-fill':'star'" size="40" :color="device.favorite?'#F29100':'#c8c9cc'" @click="changeFavorite(device)"></u-icon>
+		<view class="main-container" style="padding-top: 200rpx;">
+			<view class="main-box">
+				<view class="device-line">
+					<view class="device-card" v-for="(device,index) in realDeviceList" :key="device.id">
+						<view class="collect-box">
+							<u-icon :name="device.favorite?'star-fill':'star'" size="40" :color="device.favorite?'#F29100':'#c8c9cc'" @click="changeFavorite(device)"></u-icon>
+						</view>
+						<view class="icon-name-box">
+							<u-image width="100rpx" height="100rpx" :src="device.open?'../../static/device/'+device.iconPath+'-active.png':'../../static/device/'+device.iconPath+'.png'"></u-image>
+							<text>{{device.name}}</text>
+							<text class="openText" v-if="device.type==12">{{device.open?'打开':'关闭'}}</text>
+							<text class="openText" v-if="device.type==131||device.type==132">{{device.rate>0?device.rate+'%':'关闭'}}</text>
+						</view>
+						<!-- 开关型设备 -->
+						<view class="action-box" v-if="device.type==12">
+							<u-switch v-model="device.open" active-color="#42B983" size="40" :loading="false" @change="doControlDevice(device,index)"></u-switch>
+						</view>
+						<!-- 比例型设备 -->
+						<view class="action-rate-box" v-if="device.type==131||device.type==132">
+							<u-slider v-model="device.rate" height="40" activeColor="#42B983" block-width="50" @end="doControlDevice(device,index)"></u-slider>
+						</view>
+						<view class="action-temp-box" v-if="device.type==21">
+							<text style="color: #000000;">温度: {{device.temperature}}℃ </text>
+							<text style="color: #000000;margin-top: 10rpx;">湿度: {{device.temperature}}%</text>
+						</view>
 					</view>
-					<view class="icon-name-box">
-						<u-image width="100rpx" height="100rpx" :src="device.open?'../../static/device/'+device.iconPath+'-active.png':'../../static/device/'+device.iconPath+'.png'"></u-image>
-						<text>{{device.name}}</text>
-						<text class="openText" v-if="device.type==12">{{device.open?'打开':'关闭'}}</text>
-						<text class="openText" v-if="device.type==131">{{device.rate>0?device.rate+'%':'关闭'}}</text>
+					<!-- 无设备提示 -->
+					<view class="no-device-wrapper" v-if="deviceList.length==0">
+						<u-empty src="../../static/device-64.png" text="无设备">
+							<u-button type="success" slot="bottom" style="margin-top: 50rpx;" @click="gotoDeviceManage">添加设备</u-button>
+						</u-empty>
 					</view>
-					<!-- 开关型设备 -->
-					<view class="action-box" v-if="device.type==12">
-						<u-switch v-model="device.open" active-color="#42B983" size="50" :loading="false" @change="doControlDevice(device,index)"></u-switch>
+					<!-- 未搜索到设备提示 -->
+					<view class="no-device-wrapper" v-if="deviceList.length!=0&&realDeviceList.length==0">
+						<u-empty src="../../static/device-64.png" text="未搜索到设备">
+							<u-button type="success" slot="bottom" style="margin-top: 50rpx;" @click="gotoDeviceManage">添加设备</u-button>
+						</u-empty>
 					</view>
-					<!-- 比例型设备 -->
-					<view class="action-rate-box" v-if="device.type==131">
-						<u-slider v-model="device.rate" height="50" activeColor="#42B983" block-width="50" @end="doControlDevice(device,index)"></u-slider>
-					</view>
-					<view class="action-temp-box" v-if="device.type==21">
-						<text style="color: #000000;">温度: {{device.temperature}}℃ </text>
-						<text style="color: #000000;margin-top: 10rpx;">湿度: {{device.temperature}}%</text>
-					</view>
-				</view>
-				<!-- 无设备提示 -->
-				<view class="no-device-wrapper" v-if="deviceList.length==0">
-					<u-empty src="../../static/device-64.png" text="无设备">
-						<u-button type="success" slot="bottom" style="margin-top: 50rpx;" @click="gotoDeviceManage">添加设备</u-button>
-					</u-empty>
-				</view>
-				<!-- 未搜索到设备提示 -->
-				<view class="no-device-wrapper" v-if="deviceList.length!=0&&realDeviceList.length==0">
-					<u-empty src="../../static/device-64.png" text="未搜索到设备">
-						<u-button type="success" slot="bottom" style="margin-top: 50rpx;" @click="gotoDeviceManage">添加设备</u-button>
-					</u-empty>
 				</view>
 			</view>
 		</view>
@@ -205,8 +207,7 @@
 			doControlDevice(device, arrayIndex) {
 				//本地判断
 				let deviceType = device.type
-				if (deviceType == 13) {
-					this.deviceList[arrayIndex].open = device.rate > 0
+				if (deviceType == 131 || deviceType == 132) {
 					this.deviceList[arrayIndex].open = device.rate > 0
 				}
 				this.$u.api.doControlApi(device).then(res => {
@@ -238,15 +239,14 @@
 
 <style lang="scss">
 	.main-box {
-		// margin-top: 40rpx;
-
+		padding-bottom: 22rpx;
 	}
 
 	.device-line {
 		display: flex;
 		justify-content: space-between;
-		margin-left: 20rpx;
-		margin-right: 20rpx;
+		margin-left: 22rpx;
+		margin-right: 22rpx;
 		flex-wrap: wrap;
 
 		.no-device-wrapper {
@@ -264,7 +264,7 @@
 			background-color: #FFFFFF;
 			border-radius: 20rpx;
 			padding: 20rpx;
-			margin-top: 30rpx;
+			margin-top: 22rpx;
 
 			.collect-box {}
 

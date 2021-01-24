@@ -20,8 +20,8 @@
 		</view>
 		<view class="list-wrapper">
 			<!-- 房间选择标签 -->
-			<u-tabs ref="tabs" :list="realRoomArray" active-color="#303030" inactive-color="#c8c9cc" font-size="30" :current="selectedRoomIndex"
-			 bar-width="60" :show-bar="false" @change="roomChange"></u-tabs>
+			<u-tabs ref="tabs" :list="realRoomArray" active-color="#303030" inactive-color="#c8c9cc"  :current="selectedRoomIndex"
+			 bar-width="60" :show-bar="false" @change="roomChange"  height="80"></u-tabs>
 		</view>
 
 	</view>
@@ -156,8 +156,11 @@
 
 <style lang="scss">
 	.header-box {
+		position: fixed;
+		width: 100%;
 		padding-top: 35px;
 		background-color: #FFFFFF;
+		z-index: 1000;
 
 		.header-wrapper {
 			display: flex;
@@ -191,11 +194,9 @@
 		}
 
 		.list-wrapper {
-			margin-top: 20rpx;
+			// margin-top: 20rpx;
+			
 
-			.icon-list-wrapper {
-				margin-top: 10rpx;
-			}
 		}
 
 	}

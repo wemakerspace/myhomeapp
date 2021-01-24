@@ -81,10 +81,10 @@
 
 	page {
 		height: 100%;
+		background-color: $u-bg-color;
 	}
 
 	.main-container {
 		height: 100%;
-		background-color: $u-bg-color;
 	}
 </style>

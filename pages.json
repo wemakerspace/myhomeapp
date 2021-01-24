@@ -6,7 +6,8 @@
 		"path": "pages/index/index",
 		"style": {
 			"app-plus": {
-				"titleNView": false
+				"titleNView": false,
+				"scrollIndicator": "none"
 			}
 		}
 	}, {
@@ -20,7 +21,8 @@
 		"path": "pages/rooms/rooms",
 		"style": {
 			"app-plus": {
-				"titleNView": false
+				"titleNView": false,
+				"scrollIndicator": "none"
 			}
 		}
 	}, {
