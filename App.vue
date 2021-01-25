@@ -5,6 +5,8 @@
 	} from 'vuex'
 	export default {
 		onLaunch: function() {
+			//获取手机基本信息，用作页面数据计算
+			this.setSystemInfo(uni.getSystemInfoSync())
 			//锁定屏幕不旋转
 			plus.screen.lockOrientation('portrait-primary')
 			//1. 将本地存储信息同步到vuex
@@ -67,7 +69,7 @@
 			// })
 		},
 		methods: {
-			...mapMutations(['initData'])
+			...mapMutations(['initData', 'setSystemInfo'])
 		},
 		computed: {
 			...mapState(['login', 'selectedFamily', 'token'])

@@ -4,6 +4,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
+		systemInfo: {},
 		/**
 		 * 用户登录后的token
 		 */
@@ -32,6 +33,14 @@ const store = new Vuex.Store({
 
 	},
 	mutations: {
+		/**
+		 * 保存系统信息
+		 * @param {Object} state
+		 * @param {Object} systemInfo
+		 */
+		setSystemInfo(state, systemInfo) {
+			state.systemInfo = systemInfo
+		},
 		/**
 		 * 将本地存储的数据同步到state中
 		 * @param {Object} state

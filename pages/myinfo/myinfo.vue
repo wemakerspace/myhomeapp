@@ -77,17 +77,25 @@
 					success: function(chooseImageRes) {
 						const tempFilePaths = chooseImageRes.tempFilePaths
 						uni.uploadFile({
-							url: 'https://www.example.com/upload',
+							url: 'http://ayilink2019.eicp.vip/file/uploadImg',
 							header: {
 								token: that.token
 							},
 							filePath: tempFilePaths[0],
 							name: 'file',
-							formData: {
-								'user': 'test'
-							},
 							success: (uploadFileRes) => {
-								console.log(uploadFileRes.data);
+								let resObj = JSON.parse(uploadFileRes.data)
+								if (resObj.status) {
+									that.$u.api.updateUserInfoApi({
+										avatar: resObj.data
+									}).then(res => {
+										if (res.status) {
+											let middleObj = that.userInfo
+											middleObj.avatar = resObj.data
+											that.saveUserInfo(middleObj)
+										}
+									})
+								}
 							}
 						})
 					}

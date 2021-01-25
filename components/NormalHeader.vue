@@ -1,5 +1,5 @@
 <template>
-	<view class="normal-header-box">
+	<view class="normal-header-box" :style="{'padding-top':statusBarHeight+'px'}">
 		<view class="left-box">
 
 		</view>
@@ -24,6 +24,14 @@
 			return {
 
 			}
+		},
+		computed: {
+			/**
+			 * 使用vuex中公用的参数
+			 */
+			statusBarHeight() {
+				return this.$store.state.systemInfo.statusBarHeight
+			}
 		}
 	}
 </script>
@@ -31,7 +39,6 @@
 <style lang="scss">
 	.normal-header-box {
 		background-color: #FFFFFF;
-		padding-top: 35px;
 		padding-bottom: 30rpx;
 		padding-left: 30rpx;
 		padding-right: 30rpx;

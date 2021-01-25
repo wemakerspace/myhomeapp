@@ -1,8 +1,8 @@
 <template>
 	<view style="height: 100%;">
-		<common-header :floorArray="floorList" :roomArray="roomList" @floorSelect="floorSelect" @roomSelect="roomSelect"
+		<common-header :statusBarHeight="systemInfo.statusBarHeight" :floorArray="floorList" :roomArray="roomList" @floorSelect="floorSelect" @roomSelect="roomSelect"
 		 :selectedFloorId="selectedFloorId" :selectedRoomId="selectedRoomId" @searchConfirm="doSearchDevice"></common-header>
-		<view class="main-container" style="padding-top: 200rpx;">
+		<view class="main-container" :style="{'padding-top': 135 + 750 * systemInfo.statusBarHeight / 375 + 'rpx'}">
 			<view class="main-box">
 				<view class="device-line">
 					<view class="device-card" v-for="(device,index) in realDeviceList" :key="device.id">
@@ -120,7 +120,7 @@
 			console.log('页面隐藏')
 		},
 		computed: {
-			...mapState(['selectedFamily', 'selectedFloorId', 'selectedRoomId'])
+			...mapState(['selectedFamily', 'selectedFloorId', 'selectedRoomId','systemInfo'])
 		},
 		methods: {
 			...mapMutations(['saveSelectedFloorId', 'saveSelectedRoomId']),

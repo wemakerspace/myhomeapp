@@ -8,7 +8,7 @@
 		</view>
 		<view class="can-not-use-box">
 			<view class="header-box">
-				<text>场景属于高级功能,暂时不能使用</text>
+				<text>场景功能正在开发中</text>
 			</view>
 
 		</view>
@@ -16,10 +16,17 @@
 </template>
 
 <script>
+	import {
+		mapState,
+		mapMutations
+	} from 'vuex'
 	import NormalHeader from '../../components/NormalHeader.vue'
 	export default {
 		components: {
 			NormalHeader
+		},
+		computed: {
+			...mapState(['systemInfo'])
 		},
 		data() {
 			return {
@@ -37,5 +44,11 @@
 		transform: translate(-50%, -50%);
 		width: 700rpx;
 		text-align: center;
+
+		.header-box {
+			font-size: 40rpx;
+			font-weight: bold;
+			color: #C8C9CC;
+		}
 	}
 </style>

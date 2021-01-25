@@ -1,13 +1,13 @@
 <template>
 	<view class="main-container">
 		<!-- 头部信息框 -->
-		<view class="header-box">
+		<view class="header-box" :style="{'padding-top':systemInfo.statusBarHeight+'px'}">
 			<view class="header-info-box">
 				<view class="mail-box">
 					<u-icon name="email-fill" size="40" @click="gotoMessage"></u-icon>
 				</view>
 				<view class="slogan-box">
-					<text>大熊智能家居</text>
+					<text>MyHome</text>
 				</view>
 				<view class="setting-box">
 					<u-icon name="setting-fill" size="40" @click="showSettingPage"></u-icon>
@@ -17,7 +17,7 @@
 				<view class="avatar-box" @click="gotoInfoPage">
 					<u-avatar :src="userInfo.avatar"></u-avatar>
 					<text>{{userInfo.name}}</text>
-					<u-tag text="户主" type="info" size="mini" v-if="isHolder" />
+					<u-tag text="户主" type="warning" size="mini" v-if="isHolder" />
 				</view>
 			</view>
 		</view>
@@ -53,7 +53,7 @@
 			return {}
 		},
 		computed: {
-			...mapState(['isHolder', 'userInfo'])
+			...mapState(['isHolder', 'userInfo', 'systemInfo'])
 		},
 		methods: {
 			gotoFloorManage() {
@@ -116,7 +116,6 @@
 <style lang="scss">
 	.header-box {
 		background-color: #FFFFFF;
-		padding-top: 35px;
 		padding-bottom: 20px;
 		padding-left: 30rpx;
 		padding-right: 30rpx;

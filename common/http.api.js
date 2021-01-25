@@ -29,6 +29,9 @@ let sendFamilyAddUserUrl = '/message/sendFamilyAddUser'
 let getAllMessageUrl = '/message/getAllMessage'
 let readMessageUrl = '/message/readMessage'
 
+//文件相关
+let uploadImgUrl = '/file/uploadImg'
+
 
 const install = (Vue, vm) => {
 
@@ -58,6 +61,8 @@ const install = (Vue, vm) => {
 	let getAllMessageApi = (params = {}) => vm.$u.get(getAllMessageUrl, params)
 	let readMessageApi = (params = {}) => vm.$u.get(readMessageUrl, params)
 
+	let uploadImgApi = (params = {}) => vm.$u.post(uploadImgUrl, params)
+
 
 
 	vm.$u.api = {
@@ -80,7 +85,8 @@ const install = (Vue, vm) => {
 		updateUserInfoApi,
 		sendFamilyAddUserApi,
 		getAllMessageApi,
-		readMessageApi
+		readMessageApi,
+		uploadImgApi
 	}
 }
 

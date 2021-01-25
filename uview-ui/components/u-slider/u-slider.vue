@@ -198,10 +198,10 @@ export default {
 			return Math.round(Math.max(this.min, Math.min(value, this.max)) / this.step) * this.step;
 		},
 		onClick(event) {
-			if (this.disabled) return;
+			//if (this.disabled) return;
 			// 直接点击滑块的情况，计算方式与onTouchMove方法相同
-			const value = ((event.detail.x - this.sliderRect.left) / this.sliderRect.width) * 100;
-			this.updateValue(value, false);
+			// const value = ((event.detail.x - this.sliderRect.left) / this.sliderRect.width) * 100;
+			// this.updateValue(value, false);
 		}
 	}
 };

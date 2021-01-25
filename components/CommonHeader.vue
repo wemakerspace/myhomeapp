@@ -1,5 +1,5 @@
 <template>
-	<view class="header-box">
+	<view class="header-box" :style="{'padding-top':statusBarHeight+'px'}">
 		<view class="header-wrapper">
 			<view class="search-box" :style="{'width':(searchShow?'80%':'20%')}">
 				<u-icon name="search" size="35" @click="searchShow = (!searchShow)"></u-icon>
@@ -20,8 +20,8 @@
 		</view>
 		<view class="list-wrapper">
 			<!-- 房间选择标签 -->
-			<u-tabs ref="tabs" :list="realRoomArray" active-color="#303030" inactive-color="#c8c9cc"  :current="selectedRoomIndex"
-			 bar-width="60" :show-bar="false" @change="roomChange"  height="80"></u-tabs>
+			<u-tabs ref="tabs" :list="realRoomArray" active-color="#303030" inactive-color="#c8c9cc" :current="selectedRoomIndex"
+			 bar-width="60" :show-bar="false" @change="roomChange" height="80"></u-tabs>
 		</view>
 
 	</view>
@@ -30,6 +30,10 @@
 <script>
 	export default {
 		props: {
+			statusBarHeight: {
+				type: Number,
+				require: true
+			},
 			floorArray: {
 				type: Array,
 				require: true
@@ -158,7 +162,6 @@
 	.header-box {
 		position: fixed;
 		width: 100%;
-		padding-top: 35px;
 		background-color: #FFFFFF;
 		z-index: 1000;
 
@@ -194,8 +197,8 @@
 		}
 
 		.list-wrapper {
-			// margin-top: 20rpx;
-			
+			margin-top: 20rpx;
+
 
 		}
 
