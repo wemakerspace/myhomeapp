@@ -1,5 +1,6 @@
 <template>
 	<view class="main-container">
+		<u-toast ref="uToast" />
 		<normal-header pageName="设备管理"></normal-header>
 		<view class="add-device-body">
 			<view class="header-box">
@@ -38,11 +39,13 @@
 				<view style="padding: 20rpx;display: flex;justify-content: flex-end;">
 					<u-icon name="close" @click="addMaskShow=false"></u-icon>
 				</view>
-				<u-field v-model="wifiParam.ssid" label="wifi名" placeholder="例如: 大熊家"></u-field>
-				<u-field v-model="wifiParam.password" label="wifi密码" placeholder="例如: 123456"></u-field>
+				<u-field v-model="smartConfigParams.deviceId" label="设备ID" placeholder="例如: 123456789"></u-field>
+				<u-field v-model="smartConfigParams.ssid" label="wifi名" placeholder="例如: 大熊家"></u-field>
+				<u-field v-model="smartConfigParams.bssid" label="bssid" placeholder="bssid"></u-field>
+				<u-field v-model="smartConfigParams.password" label="wifi密码" placeholder="例如: 123456"></u-field>
 				<view style="padding-top: 40rpx;padding-bottom: 40rpx;">
 					<!-- 新增用户时先搜索然后再添加-->
-					<u-button type="success" @click="doAddDevice">设备配网</u-button>
+					<u-button type="success" @click="doAddDevice">立即添加</u-button>
 				</view>
 			</view>
 		</u-mask>
@@ -51,6 +54,7 @@
 </template>
 
 <script>
+	const hkSC = uni.requireNativePlugin('HKing-SmartConfig');
 	import {
 		mapState
 	} from 'vuex'
@@ -66,7 +70,8 @@
 				roomSelectShow: false,
 				deviceList: [],
 				addMaskShow: false,
-				wifiParam: {}
+				wifiParam: {},
+				smartConfigParams: {}
 
 			}
 		},
@@ -75,7 +80,25 @@
 		},
 		onShow() {
 			this.loadRoomList()
-			this.getWifiInfo()
+			//this.getWifiInfo()
+			//获取ssid和蓝牙等需要定位
+			var apSsid = "";
+			hkSC.getWifiSsid(result => {
+				console.log('---', result)
+				apSsid = result.apSsid;
+				console.log("apSsid：" + apSsid);
+				this.smartConfigParams.ssid = result.apSsid
+			})
+			var apBssid = "";
+			hkSC.getWifiBssid(result => {
+				if (result.apBssid == "") {
+					console.log("Bssid获取失败");
+					return;
+				}
+				apBssid = result.apBssid;
+				console.log("apBssid：" + apBssid);
+				this.smartConfigParams.bssid = result.apBssid
+			})
 		},
 		methods: {
 			getWifiInfo() {
@@ -112,45 +135,28 @@
 				})
 			},
 			doAddDevice() {
-				let DatagramPacket = plus.android.importClass('java.net.DatagramPacket');
-				let DatagramSocket = plus.android.importClass('java.net.DatagramSocket');
-				let InetAddress = plus.android.importClass('java.net.InetAddress');
-				let JString = plus.android.importClass('java.lang.String');
-				if (DatagramSocket == undefined) {
-					return;
-				}
-				let socket = new DatagramSocket(10000);
-				// 设置接收超时时长  
-				socket.setSoTimeout(6000);
-
-				// 创建广播地址  
-				let broadcastAddress = InetAddress.getByName('255.255.255.255');
-
-				// 发送广播数据  
-				let sendData = '';
-				let sendPacket = new DatagramPacket(sendData, sendData.length, broadcastAddress, 1000);
-				socket.send(sendPacket);
-				// 接收数据  
-				var isReceive = true;
-				while (isReceive) {
-					try {
-						// 设置接收缓存，需要用0填充，否则为 null 无法接收。   
-						var buffer = new Array(1024).fill(0);
-						var packet = new DatagramPacket(buffer, buffer.length);
-
-						socket.receive(packet);
-
-						var data = new JString(packet.getData()).trim();
-						if (data.length == 0) {
-							// 接收超时，结束接收  
-							isReceive = false;
-						} else {
-							console.log('===========收到数据============', data);
+				uni.showLoading({
+					title: '配网中请稍后..'
+				});
+				hkSC.startSmaerConfig(this.smartConfigParams.ssid, this.smartConfigParams.password, result => {
+					//请求添加
+					this.$u.api.addDeviceApi({
+						id: this.smartConfigParams.deviceId,
+						roomId: this.selectedRoom.value,
+						familyId: this.selectedFamily.id
+					}).then(res => {
+						if (res.status) {
+							//设备添加成功
+							this.smartConfigParams.deviceId = ''
+							uni.hideLoading()
+							this.$refs.uToast.show({
+								title: '设备添加成功',
+								type: 'success'
+							})
 						}
-					} catch (ex) {
-						isReceive = false;
-					}
-				}
+					})
+					console.log('===', result)
+				})
 			},
 			showAddMask() {
 				if (Object.keys(this.selectedRoom).length != 0) {

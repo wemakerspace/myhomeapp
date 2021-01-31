@@ -10,6 +10,7 @@ let listAllByFamilyIdUrl = '/room/listAllByFamilyId'
 let deviceListByRoomIdUrl = '/device/listByRoomId'
 let changeFavoriteUrl = '/device/changeFavorite'
 let doControlUrl = '/device/doControl'
+let addDeviceUrl = '/device/addDevice'
 
 //家庭相关
 let familyAddOrUpdateUrl = '/family/addOrUpdate'
@@ -23,6 +24,7 @@ let loginByPhonePasswordUrl = '/user/loginByPhonePassword'
 let registByPhonePasswordUrl = '/user/registByPhonePassword'
 let getUserInfoUrl = '/user/getUserInfo'
 let updateUserInfoUrl = '/user/updateUserInfo'
+let userAppOnlineUrl = '/user/userAppOnline'
 
 //消息相关
 let sendFamilyAddUserUrl = '/message/sendFamilyAddUser'
@@ -45,6 +47,7 @@ const install = (Vue, vm) => {
 	let deviceListByRoomIdApi = (params = {}) => vm.$u.get(deviceListByRoomIdUrl, params)
 	let changeFavoriteApi = (params = {}) => vm.$u.post(changeFavoriteUrl, params)
 	let doControlApi = (params = {}) => vm.$u.post(doControlUrl, params)
+	let addDeviceApi = (params = {}) => vm.$u.post(addDeviceUrl, params)
 
 	let familyAddOrUpdateApi = (params = {}) => vm.$u.post(familyAddOrUpdateUrl, params)
 	let familyListApi = (params = {}) => vm.$u.get(familyListUrl, params)
@@ -56,6 +59,7 @@ const install = (Vue, vm) => {
 	let registByPhonePasswordApi = (params = {}) => vm.$u.post(registByPhonePasswordUrl, params)
 	let getUserInfoApi = (params = {}) => vm.$u.get(getUserInfoUrl, params)
 	let updateUserInfoApi = (params = {}) => vm.$u.post(updateUserInfoUrl, params)
+	let userAppOnlineApi = (params = {}) => vm.$u.post(userAppOnlineUrl, params)
 
 	let sendFamilyAddUserApi = (params = {}) => vm.$u.post(sendFamilyAddUserUrl, params)
 	let getAllMessageApi = (params = {}) => vm.$u.get(getAllMessageUrl, params)
@@ -74,6 +78,7 @@ const install = (Vue, vm) => {
 		deviceListByRoomIdApi,
 		changeFavoriteApi,
 		doControlApi,
+		addDeviceApi,
 		familyAddOrUpdateApi,
 		familyListApi,
 		confirmJoinApi,
@@ -83,6 +88,7 @@ const install = (Vue, vm) => {
 		registByPhonePasswordApi,
 		getUserInfoApi,
 		updateUserInfoApi,
+		userAppOnlineApi,
 		sendFamilyAddUserApi,
 		getAllMessageApi,
 		readMessageApi,

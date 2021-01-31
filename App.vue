@@ -49,6 +49,18 @@
 
 		},
 		onShow: function() {
+			//上报APP在线
+			this.$u.api.userAppOnlineApi({
+				familyId: this.selectedFamily.id,
+				userId: this.userInfo.id,
+				status: true
+			}).then(res => {
+				if (res.status) {
+					console.log('用户在线上报成功')
+				}
+			})
+			//开启websocket监听楼层房间变化
+
 			console.log('2=====>App Show')
 			//打开websocket连接
 			// this.initWebSocket()
@@ -56,6 +68,16 @@
 
 		},
 		onHide: function() {
+			//上报APP离线
+			this.$u.api.userAppOnlineApi({
+				familyId: this.selectedFamily.id,
+				userId: this.userInfo.id,
+				status: false
+			}).then(res => {
+				if (res.status) {
+					console.log('用户离线上报成功')
+				}
+			})
 			console.log('3=====>App Hide')
 			//关闭websocket连接
 			console.log('影藏', this.goEasy)
@@ -72,7 +94,7 @@
 			...mapMutations(['initData', 'setSystemInfo'])
 		},
 		computed: {
-			...mapState(['login', 'selectedFamily', 'token'])
+			...mapState(['login', 'selectedFamily', 'token', 'userInfo'])
 		}
 	}
 </script>

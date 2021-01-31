@@ -9,20 +9,23 @@
 					<view class="device-card" v-for="(device,index) in realDeviceList" :key="device.id">
 						<view class="collect-box">
 							<u-icon :name="device.favorite?'star-fill':'star'" size="40" :color="device.favorite?'#F29100':'#c8c9cc'" @click="changeFavorite(device)"></u-icon>
+							<text v-show="!device.online">设备离线</text>
 						</view>
 						<view class="icon-name-box">
 							<u-image width="100rpx" height="100rpx" :src="device.open?'../../static/device/'+device.iconPath+'-active.png':'../../static/device/'+device.iconPath+'.png'"></u-image>
 							<text>{{device.name}}</text>
-							<text class="openText" v-if="device.type==12">{{device.open?'打开':'关闭'}}</text>
+							<text class="openText" v-if="device.type==111">{{device.open?'打开':'关闭'}}</text>
 							<text class="openText" v-if="device.type==131||device.type==132">{{device.rate>0?device.rate+'%':'关闭'}}</text>
 						</view>
 						<!-- 开关型设备 -->
-						<view class="action-box" v-if="device.type==12">
-							<u-switch v-model="device.open" active-color="#42B983" size="40" :loading="false" @change="doControlDevice(device,index)"></u-switch>
+						<view class="action-box" v-if="device.type==111">
+							<u-switch v-model="device.open" active-color="#42B983" size="40" :loading="false" @change="doControlDevice(device,index)"
+							 :disabled="!device.online"></u-switch>
 						</view>
 						<!-- 比例型设备 -->
 						<view class="action-rate-box" v-if="device.type==131||device.type==132">
-							<u-slider v-model="device.rate" height="40" activeColor="#42B983" block-width="50" @end="doControlDevice(device,index)"></u-slider>
+							<u-slider v-model="device.rate" height="40" activeColor="#42B983" block-width="50" @end="doControlDevice(device,index)"
+							 :disabled="!device.online"></u-slider>
 						</view>
 						<view class="action-temp-box" v-if="device.type==21">
 							<text style="color: #000000;">温度: {{device.temperature}}℃ </text>
@@ -70,21 +73,35 @@
 			}
 		},
 		onShow() {
-			console.log(this.systemInfo)
 			this.loadFloorList()
-			// this.goEasy.subscribe({
-			// 	channel: this.selectedFamily.id,
-			// 	onMessage: function(message) {
-			// 		console.log("Channel:" + message.channel + " content111111111111:" + message.content);
-			// 	},
-			// 	onSuccess: function() {
-			// 		console.log("Channel订阅成功。");
-			// 	},
-			// 	onFailed: function(error) {
-			// 		console.log("Channel订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
-			// 	}
-			// })
 			var that = this
+			that.goEasy.subscribe({
+				channel: 'devicePush::' + that.selectedFamily.id,
+				onMessage: function(message) {
+					let contentObj = JSON.parse(message.content)
+					console.log('接收到推送', contentObj)
+					for (var i = 0; i < that.realDeviceList.length; i++) {
+						if (that.realDeviceList[i].id == contentObj.deviceId) {
+							if (contentObj.online != undefined) {
+								that.realDeviceList[i].online = contentObj.online
+							}
+							switch (that.realDeviceList[i].type) {
+								case 111:
+									that.realDeviceList[i].open = contentObj.open
+									break
+								default:
+									console.log('设备状态设备类型不匹配')
+							}
+						}
+					}
+				},
+				onSuccess: function() {
+					console.log("设备状态Channel订阅成功。");
+				},
+				onFailed: function(error) {
+					console.log("设备状态Channel订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
+				}
+			})
 			// this.goEasy.subscribe({
 			// 	channel: 'floor' + that.selectedFamily.id,
 			// 	onMessage: function(message) {
@@ -268,7 +285,16 @@
 			padding: 20rpx;
 			margin-top: 22rpx;
 
-			.collect-box {}
+			.collect-box {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+
+				text {
+					font-size: 22rpx;
+					color: #C8C9CC;
+				}
+			}
 
 			.icon-name-box {
 				display: flex;
