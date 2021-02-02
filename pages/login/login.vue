@@ -3,7 +3,8 @@
 		<u-toast ref="uToast" />
 		<view class="login-box">
 			<view class="logo-box">
-				<image src="../../static/logo.png" mode="aspectFill" style="width: 200rpx;height: 200rpx;"></image>
+				<text>MyHome</text>
+				<text class="subTitle">最具极客范的开源智能家居系统</text>
 			</view>
 			<view class="login-info-box">
 				<u-field v-model="loginObj.phone" label="手机号" placeholder="请填写手机号" maxlength="11" @blur="phoneInputBlur">
@@ -13,7 +14,7 @@
 					<u-icon slot="icon" name="lock"></u-icon>
 				</u-field>
 				<view class="login-button-box">
-					<u-button type="success" class="btn" @click="doLogin">登录</u-button>
+					<u-button type="success" class="btn" @click="doLogin" :disabled="loginObj.phone.length !=11||loginObj.password.length<6||loginObj.password.length>11">登录</u-button>
 				</view>
 				<view class="regist-box">
 					<text>忘记密码?</text>
@@ -22,9 +23,9 @@
 			</view>
 
 			<view class="another-login-box">
-				<view class="weixin-login-box">
+				<view class="weixin-login-box" @click="gotoWeixinLogin">
 					<image src="../../static/login/weixin.png" mode="aspectFill" style="height: 80rpx;width: 80rpx;"></image>
-					<text>微信登录</text>
+					<text style="color: #C8C9CC;">微信登录</text>
 				</view>
 			</view>
 		</view>
@@ -51,7 +52,7 @@
 			}
 		},
 		methods: {
-			...mapMutations(['saveLoginData', 'saveUserInfo']),
+			...mapMutations(['saveLoginData', 'saveUserInfo', 'saveSelectedFamily', 'saveSelectedFloorId', 'setIsHolder']),
 			phoneInputBlur() {
 				if (!this.$u.test.mobile(this.loginObj.phone)) {
 					this.$refs.uToast.show({
@@ -71,7 +72,11 @@
 							this.saveLoginData(res.data)
 							this.$u.api.getUserInfoApi().then(res2 => {
 								if (res2.status) {
-									this.saveUserInfo(res2.data)
+									this.saveUserInfo(res2.data.user)
+									this.saveSelectedFamily(res2.data.family)
+									this.saveSelectedFloorId(res2.data.selectedFloorId)
+									this.setIsHolder(res2.data.isHolder)
+									//
 									uni.reLaunch({
 										url: '../index/index'
 									})
@@ -101,6 +106,15 @@
 				uni.navigateTo({
 					url: '../regist/regist'
 				})
+			},
+			/**
+			 * 微信登录
+			 */
+			gotoWeixinLogin() {
+				this.$refs.uToast.show({
+					title: '微信登录暂未开放',
+					type: 'warning'
+				})
 			}
 		}
 	}
@@ -122,10 +136,25 @@
 			padding: 30rpx;
 			display: flex;
 			justify-content: center;
+			height: 230rpx;
+			align-items: center;
+			flex-direction: column;
+
+			text {
+				font-weight: bold;
+				font-size: 85rpx;
+				color: #303133;
+			}
+
+			.subTitle {
+				font-size: 25rpx;
+				margin-top: 20rpx;
+				color: #C8C9CC;
+			}
 		}
 
 		.login-info-box {
-			margin-top: 60px;
+			margin-top: 50px;
 
 			.login-button-box {
 				margin-top: 30px;

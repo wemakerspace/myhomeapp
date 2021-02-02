@@ -11,8 +11,6 @@
 			plus.screen.lockOrientation('portrait-primary')
 			//1. 将本地存储信息同步到vuex
 			this.initData()
-
-			console.log('1====> App Launch,check update')
 			//应用启动时，判断是否登录，未登录的话就显示登录页面
 			if (!this.login) {
 				uni.reLaunch({
@@ -49,46 +47,32 @@
 
 		},
 		onShow: function() {
-			//上报APP在线
-			this.$u.api.userAppOnlineApi({
-				familyId: this.selectedFamily.id,
-				userId: this.userInfo.id,
-				status: true
-			}).then(res => {
-				if (res.status) {
-					console.log('用户在线上报成功')
-				}
-			})
-			//开启websocket监听楼层房间变化
-
-			console.log('2=====>App Show')
-			//打开websocket连接
-			// this.initWebSocket()
-
-
+			//1. 用户登录后每次页面打开上报APP在线
+			if (this.login && this.selectedFamily) {
+				this.$u.api.userAppOnlineApi({
+					familyId: this.selectedFamily.id,
+					userId: this.userInfo.id,
+					status: true
+				}).then(res => {
+					if (res.status) {
+						console.log('用户在线上报成功')
+					}
+				})
+			}
 		},
 		onHide: function() {
-			//上报APP离线
-			this.$u.api.userAppOnlineApi({
-				familyId: this.selectedFamily.id,
-				userId: this.userInfo.id,
-				status: false
-			}).then(res => {
-				if (res.status) {
-					console.log('用户离线上报成功')
-				}
-			})
-			console.log('3=====>App Hide')
-			//关闭websocket连接
-			console.log('影藏', this.goEasy)
-			// this.goEasy.disconnect({
-			// 	onSuccess: function() {
-			// 		console.log("GoEasy disconnect successfully.")
-			// 	},
-			// 	onFailed: function(error) {
-			// 		console.log("Failed to disconnect GoEasy, code:" + error.code + ",error:" + error.content);
-			// 	}
-			// })
+			//1. 用户登录后APP隐藏上报APP离线
+			if (this.login && this.selectedFamily) {
+				this.$u.api.userAppOnlineApi({
+					familyId: this.selectedFamily.id,
+					userId: this.userInfo.id,
+					status: false
+				}).then(res => {
+					if (res.status) {
+						console.log('用户离线上报成功')
+					}
+				})
+			}
 		},
 		methods: {
 			...mapMutations(['initData', 'setSystemInfo'])
@@ -100,7 +84,6 @@
 </script>
 
 <style lang="scss">
-	/*每个页面公共css */
 	@import "uview-ui/index.scss";
 
 	page {

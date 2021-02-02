@@ -5,14 +5,14 @@
 
 		<view class="body-box">
 			<u-field v-model="registObj.phone" label="手机号" placeholder="请填写手机号"></u-field>
-			<u-field v-model="registObj.password" label="密码" placeholder="请填写6位以上密码" :password="true"></u-field>
+			<u-field v-model="registObj.password" label="密码" placeholder="请填写6-11位密码" :password="true"></u-field>
 			<u-field v-model="rePassword" label="重复密码" placeholder="请重复填写密码" :password="true"></u-field>
 			<view style="margin-top: 30rpx;margin-bottom: 80rpx;">
-				<u-button type="success" :disabled="rePassword==''||rePassword.length<6 || rePassword!=registObj.password||registObj.phone.length!=11"
+				<u-button type="success" :disabled="rePassword==''||rePassword.length<6||rePassword.length>11 || rePassword!=registObj.password||registObj.phone.length!=11"
 				 @click="doRegist">提交</u-button>
 			</view>
 		</view>
-
+		<company-info></company-info>
 	</view>
 </template>
 
@@ -21,9 +21,11 @@
 		mapMutations
 	} from 'vuex'
 	import NormalHeader from '../../components/NormalHeader.vue'
+	import CompanyInfo from '../../components/CompanyInfo.vue'
 	export default {
 		components: {
-			NormalHeader
+			NormalHeader,
+			CompanyInfo
 		},
 		data() {
 			return {
@@ -41,15 +43,20 @@
 							this.saveLoginData(res.data)
 							this.$u.api.getUserInfoApi().then(res2 => {
 								if (res2.status) {
-									this.saveUserInfo(res2.data)
+									this.saveUserInfo(res2.data.user)
 									uni.reLaunch({
 										url: '../index/index'
 									})
 								}
 							})
+						} else {
+							this.$refs.uToast.show({
+								title: res.message,
+								type: 'error',
+								duration: 1500
+							})
 						}
 					})
-
 				} else {
 					this.$refs.uToast.show({
 						title: '手机号格式错误',

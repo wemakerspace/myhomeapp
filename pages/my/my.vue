@@ -4,6 +4,7 @@
 		<view class="header-box" :style="{'padding-top':systemInfo.statusBarHeight+'px'}">
 			<view class="header-info-box">
 				<view class="mail-box">
+					<u-badge :is-dot="true" type="error" :offset="[0,-10]" v-show="haveNotRead"></u-badge>
 					<u-icon name="email-fill" size="40" @click="gotoMessage"></u-icon>
 				</view>
 				<view class="slogan-box">
@@ -50,12 +51,24 @@
 	} from 'vuex'
 	export default {
 		data() {
-			return {}
+			return {
+				haveNotRead: false
+			}
 		},
 		computed: {
 			...mapState(['isHolder', 'userInfo', 'systemInfo'])
 		},
+		onShow() {
+			this.loadHaveNotRead()
+		},
 		methods: {
+			loadHaveNotRead() {
+				this.$u.api.getHaveNotReadApi().then(res => {
+					if (res.status) {
+						this.haveNotRead = res.data
+					}
+				})
+			},
 			gotoFloorManage() {
 				uni.navigateTo({
 					url: '../floormanage/floormanage'
@@ -128,6 +141,7 @@
 			.mail-box {
 				display: flex;
 				align-items: center;
+				position: relative
 			}
 
 			.slogan-box {

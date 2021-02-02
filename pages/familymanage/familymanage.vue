@@ -134,6 +134,13 @@
 									this.setIsHolder(res.data)
 								}
 							})
+							//上报选择的家庭
+							this.$u.api.updateUserSelectedApi({
+								selectedFamilyId: res.data[0].id
+							}).then(res => {
+								console.log('更新用户选择家庭成功')
+
+							})
 						} else {
 							for (var i = 0; i < this.familyList.length; i++) {
 								if (this.familyList[i].id == this.selectedFamily.id) {
@@ -155,6 +162,13 @@
 						this.setIsHolder(res.data)
 					}
 				})
+				//上报选择的家庭
+				this.$u.api.updateUserSelectedApi({
+					selectedFamilyId: this.familyList[index].id
+				}).then(res => {
+					console.log('更新用户选择家庭成功')
+
+				})
 			},
 			closeMarsk() {
 				this.familyName = ''
@@ -167,8 +181,10 @@
 			},
 
 			showModifyMask(modifyData) {
-				this.modifyData = modifyData
-				this.modifyMaskShow = true
+				if (this.isHolder) {
+					this.modifyData = modifyData
+					this.modifyMaskShow = true
+				}
 			},
 			saveData() {
 				this.$u.api.familyAddOrUpdateApi({

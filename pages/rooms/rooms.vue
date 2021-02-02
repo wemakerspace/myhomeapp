@@ -75,67 +75,35 @@
 		onShow() {
 			this.loadFloorList()
 			var that = this
-			that.goEasy.subscribe({
-				channel: 'devicePush::' + that.selectedFamily.id,
-				onMessage: function(message) {
-					let contentObj = JSON.parse(message.content)
-					for (var i = 0; i < that.realDeviceList.length; i++) {
-						if (that.realDeviceList[i].id == contentObj.deviceId) {
-							if (contentObj.online != undefined) {
-								that.realDeviceList[i].online = contentObj.online
-							}
-							switch (that.realDeviceList[i].type) {
-								case 111:
-									that.realDeviceList[i].open = contentObj.open
-									break
-								default:
-									console.log('设备状态设备类型不匹配')
+			if (this.selectedFamily) {
+				that.goEasy.subscribe({
+					channel: 'devicePush::' + that.selectedFamily.id,
+					onMessage: function(message) {
+						let contentObj = JSON.parse(message.content)
+						for (var i = 0; i < that.realDeviceList.length; i++) {
+							if (that.realDeviceList[i].id == contentObj.deviceId) {
+								if (contentObj.online != undefined) {
+									that.realDeviceList[i].online = contentObj.online
+								}
+								switch (that.realDeviceList[i].type) {
+									case 111:
+										that.realDeviceList[i].open = contentObj.open
+										break
+									default:
+										console.log('设备状态设备类型不匹配')
+								}
 							}
 						}
+					},
+					onSuccess: function() {
+						console.log("设备状态Channel订阅成功。");
+					},
+					onFailed: function(error) {
+						console.log("设备状态Channel订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
 					}
-				},
-				onSuccess: function() {
-					console.log("设备状态Channel订阅成功。");
-				},
-				onFailed: function(error) {
-					console.log("设备状态Channel订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
-				}
-			})
-			// this.goEasy.subscribe({
-			// 	channel: 'floor' + that.selectedFamily.id,
-			// 	onMessage: function(message) {
-			// 		let jsonString = message.content
-			// 		let receiveObj = JSON.parse(jsonString)
-			// 		console.log('楼层：', receiveObj)
-			// 		that.saveSelectedFloorId(receiveObj.floorId)
+				})
+			}
 
-			// 	},
-			// 	onSuccess: function() {
-			// 		console.log("Channe2订阅成功。");
-			// 	},
-			// 	onFailed: function(error) {
-			// 		console.log("Channel订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
-			// 	}
-			// })
-			// this.goEasy.subscribe({
-			// 	channel: 'room' + that.selectedFamily.id,
-			// 	onMessage: function(message) {
-			// 		let jsonString = message.content
-			// 		let receiveObj = JSON.parse(jsonString)
-			// 		console.log('房间：', receiveObj)
-			// 		that.saveSelectedRoomId(receiveObj.roomId)
-
-			// 	},
-			// 	onSuccess: function() {
-			// 		console.log("Channe2订阅成功。");
-			// 	},
-			// 	onFailed: function(error) {
-			// 		console.log("Channel订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
-			// 	}
-			// })
-		},
-		onHide() {
-			console.log('页面隐藏')
 		},
 		computed: {
 			...mapState(['selectedFamily', 'selectedFloorId', 'selectedRoomId', 'systemInfo'])
@@ -146,13 +114,15 @@
 			 * 加载所有楼层信息
 			 */
 			loadFloorList() {
-				this.$u.api.floorListApi({
-					familyId: this.selectedFamily.id
-				}).then(res => {
-					if (res.status) {
-						this.floorList = res.data
-					}
-				})
+				if (this.selectedFamily) {
+					this.$u.api.floorListApi({
+						familyId: this.selectedFamily.id
+					}).then(res => {
+						if (res.status) {
+							this.floorList = res.data
+						}
+					})
+				}
 			},
 			loadRoomListByFloorId(fId) {
 				this.$u.api.roomListByFloorIdApi({
@@ -189,7 +159,11 @@
 			floorSelect(e) {
 				this.loadRoomListByFloorId(e)
 				this.saveSelectedFloorId(e)
-
+				this.$u.api.updateUserSelectedApi({
+					selectedFloorId: e
+				}).then(res => {
+					console.log('更新用户选择楼层成功')
+				})
 			},
 			/**
 			 * 房间选择

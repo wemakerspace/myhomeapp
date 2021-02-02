@@ -13,6 +13,11 @@ const install = (Vue, vm) => {
 			return res;
 		} else {
 			console.log(res)
+			if (res.code == 11008) {
+				uni.reLaunch({
+					url: '/pages/login/login.vue'
+				})
+			}
 			return res;
 		}
 	}

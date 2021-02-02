@@ -36,7 +36,6 @@
 			loadMessage() {
 				this.$u.api.getAllMessageApi().then(res => {
 					if (res.status) {
-						console.log(res.data)
 						this.messageList = res.data
 					}
 				})

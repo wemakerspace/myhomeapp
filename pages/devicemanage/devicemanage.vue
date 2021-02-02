@@ -39,13 +39,15 @@
 				<view style="padding: 20rpx;display: flex;justify-content: flex-end;">
 					<u-icon name="close" @click="addMaskShow=false"></u-icon>
 				</view>
-				<u-field v-model="smartConfigParams.deviceId" label="设备ID" placeholder="例如: 123456789"></u-field>
-				<u-field v-model="smartConfigParams.ssid" label="wifi名" placeholder="例如: 大熊家"></u-field>
-				<u-field v-model="smartConfigParams.bssid" label="bssid" placeholder="bssid"></u-field>
+				<u-field v-model="deviceId" label="设备ID" placeholder="请填写设备ID">
+					<u-icon slot="right" name="scan" color="#c8c9cc" size="40" @click="openScan"></u-icon>
+				</u-field>
+				<u-field v-model="smartConfigParams.ssid" label="wifi名" placeholder="例如: 大熊家" :disabled="true"></u-field>
+				<u-field v-model="smartConfigParams.bssid" label="bssid" placeholder="bssid" :disabled="true"></u-field>
 				<u-field v-model="smartConfigParams.password" label="wifi密码" placeholder="例如: 123456"></u-field>
 				<view style="padding-top: 40rpx;padding-bottom: 40rpx;">
 					<!-- 新增用户时先搜索然后再添加-->
-					<u-button type="success" @click="doAddDevice">立即添加</u-button>
+					<u-button type="success" @click="doAddDevice" :disabled="deviceId==''||smartConfigParams.password==''">立即添加</u-button>
 				</view>
 			</view>
 		</u-mask>
@@ -70,8 +72,8 @@
 				roomSelectShow: false,
 				deviceList: [],
 				addMaskShow: false,
-				wifiParam: {},
-				smartConfigParams: {}
+				smartConfigParams: {},
+				deviceId: ''
 
 			}
 		},
@@ -80,31 +82,30 @@
 		},
 		onShow() {
 			this.loadRoomList()
-			//this.getWifiInfo()
-			//获取ssid和蓝牙等需要定位
-			var apSsid = "";
-			hkSC.getWifiSsid(result => {
-				console.log('---', result)
-				apSsid = result.apSsid;
-				console.log("apSsid：" + apSsid);
-				this.smartConfigParams.ssid = result.apSsid
-			})
-			var apBssid = "";
-			hkSC.getWifiBssid(result => {
-				if (result.apBssid == "") {
-					console.log("Bssid获取失败");
-					return;
-				}
-				apBssid = result.apBssid;
-				console.log("apBssid：" + apBssid);
-				this.smartConfigParams.bssid = result.apBssid
-			})
 		},
 		methods: {
-			getWifiInfo() {
-				uni.getNetworkType({
-					success: function(res) {
-						console.log(res.networkType);
+			openScan() {
+				uni.scanCode({
+					onlyFromCamera: true,
+					success: (res) => {
+						if (res.scanType != 'QR_CODE') {
+							this.$refs.uToast.show({
+								title: '请扫描正确的二维码',
+								type: 'error'
+							})
+						} else {
+							try {
+								console.log(res)
+								let obj = JSON.parse(res.result)
+								this.deviceId = obj.deviceId
+							} catch (ex) {
+								this.$refs.uToast.show({
+									title: '请扫描正确的二维码',
+									type: 'error'
+								})
+							}
+
+						}
 					}
 				})
 			},
@@ -135,32 +136,57 @@
 				})
 			},
 			doAddDevice() {
-				uni.showLoading({
-					title: '配网中请稍后..'
-				});
-				hkSC.startSmaerConfig(this.smartConfigParams.ssid, this.smartConfigParams.password, result => {
-					//请求添加
-					this.$u.api.addDeviceApi({
-						id: this.smartConfigParams.deviceId,
-						roomId: this.selectedRoom.value,
-						familyId: this.selectedFamily.id
-					}).then(res => {
-						if (res.status) {
-							//设备添加成功
-							this.smartConfigParams.deviceId = ''
-							uni.hideLoading()
-							this.$refs.uToast.show({
-								title: '设备添加成功',
-								type: 'success'
-							})
-						}
+				if (this.deviceId != '' && this.smartConfigParams.ssid != '' && this.smartConfigParams.bssid != '' && this.smartConfigParams
+					.password != '') {
+					this.smartConfigParams.deviceId = this.deviceId
+					uni.showLoading({
+						title: '配网中请稍后..'
 					})
-					console.log('===', result)
-				})
+					hkSC.startSmaerConfig(this.smartConfigParams.ssid, this.smartConfigParams.password, result => {
+						//请求添加
+						this.$u.api.addDeviceApi({
+							id: this.smartConfigParams.deviceId,
+							roomId: this.selectedRoom.value,
+							familyId: this.selectedFamily.id
+						}).then(res => {
+							if (res.status) {
+								//设备添加成功
+								this.smartConfigParams.deviceId = ''
+								this.deviceId = ''
+								uni.hideLoading()
+								this.$refs.uToast.show({
+									title: '设备添加成功',
+									type: 'success'
+								})
+							}
+						})
+						console.log('===', result)
+					})
+				}
+
 			},
 			showAddMask() {
 				if (Object.keys(this.selectedRoom).length != 0) {
-					this.addMaskShow = true
+					//判断是否使用WiFi
+					uni.getNetworkType({
+						success: (res) => {
+							if (res.networkType !== 'wifi') {
+								this.$refs.uToast.show({
+									title: '请链接WiFi后重试',
+									type: 'error'
+								})
+							} else {
+								//获取ssid和蓝牙等需要定位
+								hkSC.getWifiSsid(result => {
+									this.smartConfigParams.ssid = result.apSsid
+								})
+								hkSC.getWifiBssid(result => {
+									this.smartConfigParams.bssid = result.apBssid
+								})
+								this.addMaskShow = true
+							}
+						}
+					})
 				}
 			}
 		}
