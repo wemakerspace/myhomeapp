@@ -16,19 +16,18 @@
 				uni.reLaunch({
 					url: 'pages/login/login'
 				})
-			} else {
-				this.goEasy.connect({
-					onSuccess: function() { //连接成功
-						console.log("GoEasy connect successfully.") //连接成功
-					},
-					onFailed: function(error) { //连接失败
-						console.log("Failed to connect GoEasy, code:" + error.code + ",error:" + error.content);
-					},
-					onProgress: function(attempts) { //连接或自动重连中
-						console.log("GoEasy is connecting", attempts);
-					}
-				})
 			}
+			this.goEasy.connect({
+				onSuccess: function() { //连接成功
+					console.log("GoEasy connect successfully.") //连接成功
+				},
+				onFailed: function(error) { //连接失败
+					console.log("Failed to connect GoEasy, code:" + error.code + ",error:" + error.content);
+				},
+				onProgress: function(attempts) { //连接或自动重连中
+					console.log("GoEasy is connecting", attempts);
+				}
+			})
 			// uni.openBluetoothAdapter({
 			// 	success() {
 			// 		console.log('1.开启蓝牙适配器成功')
@@ -44,7 +43,7 @@
 			// 		})
 			// 	}
 			// })
-
+			//热更新
 		},
 		onShow: function() {
 			//1. 用户登录后每次页面打开上报APP在线

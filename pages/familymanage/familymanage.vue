@@ -17,7 +17,6 @@
 				</view>
 			</view>
 			<view class="item-box-wrapper">
-				<!-- 无数据提示 -->
 				<view class="family-cad-item" v-for="(family,index) in familyList" :key="index">
 					<view class="card-header-box" @click="showModifyMask(family)">
 						<view>
@@ -34,7 +33,7 @@
 					</view>
 				</view>
 				<!-- 无数据提示 -->
-				<u-empty text="暂无家庭数据" mode="data" v-if="familyList.length==0" style="margin-bottom: ;"></u-empty>
+				<u-empty text="暂无家庭数据" mode="data" v-if="familyList.length==0"></u-empty>
 			</view>
 		</view>
 		<!-- 添加用户mask -->

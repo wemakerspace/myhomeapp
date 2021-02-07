@@ -8,9 +8,9 @@
 					<text>选择房间后操作</text>
 				</view>
 				<view class="action-box">
-					<view class="" style="display: flex;align-items: center;margin-right: 30rpx;">
+					<view class="" style="display: flex;align-items: center;margin-right: 30rpx;" @click="roomSelectShow=true">
 						<text style="font-size: 22rpx;margin-right: 10rpx;">{{selectedRoom.label?selectedRoom.label:'选择房间'}}</text>
-						<u-icon name="arrow-down-fill" @click="roomSelectShow=true" size="30"></u-icon>
+						<u-icon name="arrow-down-fill" size="30"></u-icon>
 					</view>
 					<view class="">
 						<u-icon name="plus" @click="showAddMask" size="40" :color="selectedRoom.label?'#303030':'#c8c9cc'"></u-icon>
@@ -19,9 +19,9 @@
 			</view>
 			<view class="item-box-wrapper">
 				<!-- 无数据提示 -->
-				<u-empty src="../../static/device-64.png" text="无设备" v-show="deviceList.length==0" style="margin-top: 40rpx;"></u-empty>
+				<u-empty src="../../static/device-64.png" text="无设备" v-show="deviceList.length==0"></u-empty>
 
-				<view class="item-box" v-for="device in deviceList" :key="device.id">
+				<!-- <view class="item-box" v-for="device in deviceList" :key="device.id">
 					<image src="../../static/device/lamp-active.png" mode="aspectFill" style="width: 100rpx;height: 100rpx;"></image>
 					<view class="">
 						<view class="">
@@ -31,7 +31,7 @@
 
 						</view>
 					</view>
-				</view>
+				</view> -->
 			</view>
 		</view>
 		<u-mask :show="addMaskShow">
@@ -131,6 +131,7 @@
 					roomId: roomId
 				}).then(res => {
 					if (res.status) {
+						console.log(res.data)
 						this.deviceList = res.data
 					}
 				})
@@ -160,7 +161,6 @@
 								})
 							}
 						})
-						console.log('===', result)
 					})
 				}
 

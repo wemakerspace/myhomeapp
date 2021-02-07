@@ -14,28 +14,28 @@
 						<view class="icon-name-box">
 							<u-image width="100rpx" height="100rpx" :src="device.open?'../../static/device/'+device.iconPath+'-active.png':'../../static/device/'+device.iconPath+'.png'"></u-image>
 							<text>{{device.name}}</text>
-							<text class="openText" v-if="device.type==111">{{device.open?'打开':'关闭'}}</text>
-							<text class="openText" v-if="device.type==131||device.type==132">{{device.rate>0?device.rate+'%':'关闭'}}</text>
+							<text class="openText" v-if="device.type==1&&device.subType==1">{{device.open?'打开':'关闭'}}</text>
+							<text class="openText" v-if="device.type==1&&device.subType==2">{{device.rate>0?device.rate+'%':'关闭'}}</text>
 						</view>
 						<!-- 开关型设备 -->
-						<view class="action-box" v-if="device.type==111">
+						<view class="action-box" v-if="device.type==1&&device.subType==1">
 							<u-switch v-model="device.open" active-color="#42B983" size="40" :loading="false" @change="doControlDevice(device,index)"
 							 :disabled="!device.online"></u-switch>
 						</view>
 						<!-- 比例型设备 -->
-						<view class="action-rate-box" v-if="device.type==131||device.type==132">
+						<view class="action-rate-box" v-if="device.type==1&&device.subType==2">
 							<u-slider v-model="device.rate" height="40" activeColor="#42B983" block-width="50" @end="doControlDevice(device,index)"
 							 :disabled="!device.online"></u-slider>
 						</view>
-						<view class="action-temp-box" v-if="device.type==21">
-							<text style="color: #000000;">温度: {{device.temperature}}℃ </text>
-							<text style="color: #000000;margin-top: 10rpx;">湿度: {{device.temperature}}%</text>
+						<view class="action-temp-box" v-if="device.type==2&&device.subType==1">
+							<text style="color: #000000;">温度: {{device.payload.temperature}}℃ </text>
+							<text style="color: #000000;margin-top: 10rpx;">湿度: {{device.payload.humidity}}%</text>
 						</view>
 					</view>
 					<!-- 无设备提示 -->
 					<view class="no-device-wrapper" v-if="deviceList.length==0">
 						<u-empty src="../../static/device-64.png" text="无设备">
-							<u-button type="success" slot="bottom" style="margin-top: 50rpx;" @click="gotoDeviceManage">添加设备</u-button>
+							<u-button type="success" slot="bottom" style="margin-top: 50rpx;" @click="selectedFamily?gotoDeviceManage():gotoFamilyManage()">{{selectedFamily?'添加设备':'请先完善家庭信息'}}</u-button>
 						</u-empty>
 					</view>
 					<!-- 未搜索到设备提示 -->
@@ -80,15 +80,21 @@
 					channel: 'devicePush::' + that.selectedFamily.id,
 					onMessage: function(message) {
 						let contentObj = JSON.parse(message.content)
-						console.log('接收到推送', contentObj)
 						for (var i = 0; i < that.realDeviceList.length; i++) {
 							if (that.realDeviceList[i].id == contentObj.deviceId) {
-								if (contentObj.online != undefined) {
-									that.realDeviceList[i].online = contentObj.online
-								}
 								switch (that.realDeviceList[i].type) {
-									case 111:
+									case 1:
+										if (contentObj.online != undefined) {
+											that.realDeviceList[i].online = contentObj.online
+										}
 										that.realDeviceList[i].open = contentObj.open
+										break
+									case 2:
+										if (contentObj.online != undefined) {
+											that.realDeviceList[i].online = contentObj.online
+										} else {
+											that.realDeviceList[i].payload = contentObj.payload
+										}
 										break
 									default:
 										console.log('设备状态设备类型不匹配')
@@ -114,7 +120,7 @@
 			 * 加载所有楼层信息
 			 */
 			loadFloorList() {
-				if(this.selectedFamily){
+				if (this.selectedFamily) {
 					this.$u.api.floorListApi({
 						familyId: this.selectedFamily.id
 					}).then(res => {
@@ -176,6 +182,11 @@
 			gotoDeviceManage() {
 				uni.navigateTo({
 					url: '../devicemanage/devicemanage'
+				})
+			},
+			gotoFamilyManage() {
+				uni.navigateTo({
+					url: '../familymanage/familymanage'
 				})
 			},
 			/**

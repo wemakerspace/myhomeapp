@@ -7,7 +7,7 @@
 				<text class="subTitle">最具极客范的开源智能家居系统</text>
 			</view>
 			<view class="login-info-box">
-				<u-field v-model="loginObj.phone" label="手机号" placeholder="请填写手机号" maxlength="11" @blur="phoneInputBlur">
+				<u-field v-model="loginObj.phone" label="手机号" placeholder="请填写手机号" maxlength="11">
 					<u-icon slot="icon" name="phone"></u-icon>
 				</u-field>
 				<u-field v-model="loginObj.password" label="密码" placeholder="请填写密码" type="password">
@@ -53,15 +53,6 @@
 		},
 		methods: {
 			...mapMutations(['saveLoginData', 'saveUserInfo', 'saveSelectedFamily', 'saveSelectedFloorId', 'setIsHolder']),
-			phoneInputBlur() {
-				if (!this.$u.test.mobile(this.loginObj.phone)) {
-					this.$refs.uToast.show({
-						title: '手机号格式错误',
-						type: 'error',
-						duration: 1500
-					})
-				}
-			},
 			/**
 			 * 登录
 			 */

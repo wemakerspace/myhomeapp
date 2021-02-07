@@ -36,6 +36,9 @@ let readMessageUrl = '/message/readMessage'
 //文件相关
 let uploadImgUrl = '/file/uploadImg'
 
+//app版本相关
+let versionCheckUrl = '/appVersion/versionCheck'
+
 
 const install = (Vue, vm) => {
 
@@ -71,6 +74,8 @@ const install = (Vue, vm) => {
 
 	let uploadImgApi = (params = {}) => vm.$u.post(uploadImgUrl, params)
 
+	let versionCheckApi = (params = {}) => vm.$u.get(versionCheckUrl, params)
+
 
 
 	vm.$u.api = {
@@ -98,7 +103,8 @@ const install = (Vue, vm) => {
 		sendFamilyAddUserApi,
 		getAllMessageApi,
 		readMessageApi,
-		uploadImgApi
+		uploadImgApi,
+		versionCheckApi
 	}
 }
 
