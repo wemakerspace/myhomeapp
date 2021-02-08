@@ -8,12 +8,10 @@
 			</view>
 		</view>
 		<u-cell-group>
-			<u-cell-item icon="question-circle" title="版本信息" @click="gotoVersionInfo"></u-cell-item>
-			<u-cell-item icon="order" title="用户协议" @click="gotoUserProtocol"></u-cell-item>
+			<u-cell-item icon="order" title="版本信息" @click="gotoVersionInfo"></u-cell-item>
+			<!-- <u-cell-item icon="order" title="用户协议" @click="gotoUserProtocol"></u-cell-item> -->
+			<u-cell-item icon="question-circle" title="检查新版本" @click="doCheckUpdate"></u-cell-item>
 		</u-cell-group>
-		<view class="check-update-info">
-			<u-button type="success" @click="doCheckUpdate">检查更新</u-button>
-		</view>
 		<!-- 版权信息 -->
 		<company-info></company-info>
 	</view>
@@ -67,34 +65,51 @@
 										success: (modal) => {
 											if (modal.confirm) {
 												if (plus.os.name == "Android") {
-													console.log('-----')
-													plus.runtime.openURL(res.data.wgtUrl);
+													console.log('====', res.data.wgtUrl)
+													plus.runtime.openURL(res.data.wgtUrl)
 												} else {
-													console.log("ios去商店");
+													console.log("ios去商店")
+													this.$refs.uToast.show({
+														title: '目前不支持ios系统',
+														type: 'error',
+														duration: 1500
+													})
 													//app后面可以写上你们软件的拼音~ id可以在苹果商店中分享软件链接中有~
 													// id替换成你们自己应用的id
-													plus.runtime.launchApplication({
-														action: 'https://itunes.apple.com/cn/app/*****/id******'
-													}, function(e) {
-														console.log('Open system default browser failed: ' + e.message);
-													})
+													// plus.runtime.launchApplication({
+													// 	action: 'https://itunes.apple.com/cn/app/*****/id******'
+													// }, function(e) {
+													// 	console.log('Open system default browser failed: ' + e.message);
+													// })
 												}
 											}
 										}
 									})
 								} else {
+									uni.showLoading({
+										title: '更新下载中',
+										mask: true
+									})
 									uni.downloadFile({
 										url: res.data.wgtUrl,
 										success: (downloadResult) => {
 											if (downloadResult.statusCode === 200) {
-												plus.runtime.install(downloadResult.tempFilePath, {
-													force: true
-												}, function() {
-													console.log('安装成功...');
-													plus.runtime.restart();
-												}, function(e) {
-													console.error('安装失败...', e);
-												});
+												uni.hideLoading()
+												uni.showModal({
+													title: '安装提示',
+													content: '是否立即安装更新并重启APP?',
+													success: function(res) {
+														if (res.confirm) {
+															plus.runtime.install(downloadResult.tempFilePath, {
+																force: true
+															}, function() {
+																plus.runtime.restart();
+															}, function(e) {
+																console.error('安装失败...', e);
+															})
+														}
+													}
+												})
 											}
 										}
 									})
@@ -135,10 +150,5 @@
 				color: #303133;
 			}
 		}
-	}
-
-	.check-update-info {
-		margin-top: 70rpx;
-		padding: 30rpx;
 	}
 </style>

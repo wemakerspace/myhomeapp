@@ -10,15 +10,17 @@ const install = (Vue, vm) => {
 	// 响应拦截，判断状态码是否通过
 	Vue.prototype.$u.http.interceptor.response = (res) => {
 		if (res.status) {
-			return res;
+			return res
 		} else {
-			console.log(res)
+
 			if (res.code == 11008) {
+				console.log(res)
 				uni.reLaunch({
-					url: '/pages/login/login.vue'
+					url:'/pages/login/login.vue'
 				})
+			} else {
+				return res
 			}
-			return res;
 		}
 	}
 }
