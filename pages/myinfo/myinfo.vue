@@ -69,6 +69,7 @@
 
 			},
 			openSelectImg() {
+				console.log(this.userInfo)
 				var that = this
 				uni.chooseImage({
 					count: 1,
@@ -77,7 +78,7 @@
 					success: function(chooseImageRes) {
 						const tempFilePaths = chooseImageRes.tempFilePaths
 						uni.uploadFile({
-							url: 'http://ayilink2019.eicp.vip/file/uploadImg',
+							url: 'https://myhomeapi.dengyi.pro/file/uploadImg',
 							header: {
 								token: that.token
 							},
@@ -92,6 +93,7 @@
 										if (res.status) {
 											let middleObj = that.userInfo
 											middleObj.avatar = resObj.data
+											console.log(middleObj)
 											that.saveUserInfo(middleObj)
 										}
 									})

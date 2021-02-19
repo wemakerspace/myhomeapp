@@ -10,14 +10,16 @@
 				<u-field v-model="loginObj.phone" label="手机号" placeholder="请填写手机号" maxlength="11">
 					<u-icon slot="icon" name="phone"></u-icon>
 				</u-field>
-				<u-field v-model="loginObj.password" label="密码" placeholder="请填写密码" type="password">
+				<u-field v-model="loginObj.password" label="密码" placeholder="请填写密码" type="password" maxlength="11">
 					<u-icon slot="icon" name="lock"></u-icon>
 				</u-field>
 				<view class="login-button-box">
 					<u-button type="success" class="btn" @click="doLogin" :disabled="loginObj.phone.length !=11||loginObj.password.length<6||loginObj.password.length>11">登录</u-button>
 				</view>
 				<view class="regist-box">
-					<text>忘记密码?</text>
+					<view>
+						<text v-if="false">忘记密码?</text>
+					</view>
 					<text @click="gotoRegist">立即注册</text>
 				</view>
 			</view>

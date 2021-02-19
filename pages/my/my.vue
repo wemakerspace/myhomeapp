@@ -60,6 +60,7 @@
 		},
 		onShow() {
 			this.loadHaveNotRead()
+			console.log(this.userInfo)
 		},
 		methods: {
 			loadHaveNotRead() {
